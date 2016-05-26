@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-using Yelp.Portable;
+using YelpSharp;
 
 namespace Mapdo
 {
@@ -139,19 +139,13 @@ namespace Mapdo
 
             using (var dialog = UserDialogs.Instance.Loading("Searching..."))
             {
-                var yelpClient = new YelpClient();
-                var yelpResults = await yelpClient.Search(new SearchOptions
-                {
-                    GeneralOptions = new GeneralOptions
-                    {
-                        term = searchBar.Text,
-                        radius_filter = 25000
-                    },
-                    LocationOptions = new LocationOptions
-                    {
-                        location = ViewModel.Trip.Name
-                    }
-                });
+                var yelpClient = new YelpClient(App.Config.Yelp.AccessToken, App.Config.Yelp.AccessTokenSecret, App.Config.Yelp.ConsumerKey, App.Config.Yelp.ConsumerSecret);
+
+                var yelpGeneralOptions  = new YelpSearchOptionsGeneral(query: searchBar.Text, radiusFilter: 25000);
+                var yelpLocationOptions = new YelpSearchOptionsLocation(ViewModel.Trip.Name);
+                var yelpSearchOptions   = new YelpSearchOptions(general: yelpGeneralOptions, location: yelpLocationOptions);
+
+                var yelpResults         = await yelpClient.SearchWithOptions(yelpSearchOptions);
 
                 ClearSearchResults();
 
@@ -161,7 +155,7 @@ namespace Mapdo
 
                 foreach (var x in yelpResults.businesses)
                 {
-                    var poi = new Poi(x.name, x.location.coordinate.latitude, x.location.coordinate.longitude)
+                    var poi = new Poi(x.name, x.location.coordinate.Latitude, x.location.coordinate.Longitude)
                     {
                         Address = String.Join(", ", x.location.display_address),
                         IsSearchResult = true,

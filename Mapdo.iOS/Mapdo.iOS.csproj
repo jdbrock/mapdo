@@ -116,16 +116,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Yelp.iOS\Yelp.iOS.csproj">
-      <Project>{d01f0fff-58f2-455d-ba8a-0de48f96793f}</Project>
-      <Name>Yelp.iOS</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
-    </ProjectReference>
-    <ProjectReference Include="..\Yelp.Portable\Yelp.Portable.csproj">
-      <Project>{401926af-f4fe-4d45-9177-7266fb847aa9}</Project>
-      <Name>Yelp.Portable</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Brock.Services\Brock.Services.csproj">
       <Project>{5e254053-2af6-4701-8047-89752f5b46ca}</Project>
       <Name>Brock.Services</Name>
@@ -184,10 +174,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.2.3\lib\Xamarin.iOS10\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using YelpSharp;
 
 namespace Mapdo
 {
@@ -39,7 +40,7 @@ namespace Mapdo
             }
         }
 
-        public Yelp.Portable.Business ExternalYelpData { get; set; }
+        public YelpBusiness ExternalYelpData { get; set; }
 
         // ===========================================================================
         // = Construction

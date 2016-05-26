@@ -5,10 +5,7 @@ using Xamarin.Themes;
 using Xamarin.Themes.Core;
 using Foundation;
 using UIKit;
-using Yelp;
-using Yelp.iOS;
 using Brock.Services;
-using Yelp.Portable;
 using System.Reflection;
 using Akavache;
 
@@ -37,16 +34,6 @@ namespace Mapdo.iOS
             global::Xamarin.FormsMaps.Init();
 
             LoadApplication(new App());
-
-            Services.Register(new YelpHttpClient("http://api.yelp.com/v2/",
-                new Options
-                {
-                    AccessToken = App.Config.Yelp.AccessToken,
-                    AccessTokenSecret = App.Config.Yelp.AccessTokenSecret,
-                    ConsumerKey = App.Config.Yelp.ConsumerKey,
-                    ConsumerSecret = App.Config.Yelp.ConsumerSecret
-                }
-            ));
 
             return base.FinishedLaunching(app, options);
         }

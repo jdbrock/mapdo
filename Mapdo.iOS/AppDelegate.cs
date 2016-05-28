@@ -26,8 +26,10 @@ namespace Mapdo.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            Services.GetBaseTypeFunc = T => T.BaseType;
-            Services.GetInterfacesFunc = T => T.FindInterfaces(new TypeFilter((X, O) => true), null);
+            Services.Initialize(
+                T => T.BaseType, 
+                T => T.FindInterfaces((X, Y) => true, null));
+
             Services.Register(new AssemblyService());
 
             global::Xamarin.Forms.Forms.Init();

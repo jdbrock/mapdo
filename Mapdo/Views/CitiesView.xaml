@@ -1,14 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<this:ViewPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Mapdo.TripView"
-             Title="Trips">
+             xmlns:vm="clr-namespace:Mapdo.ViewModels"
+             xmlns:this="clr-namespace:Mapdo"
+             x:Class="Mapdo.Views.CitiesView"
+             x:TypeArguments="vm:CitiesViewModel"
+             Title="Cities">
   
     <ContentPage.ToolbarItems>
-      <ToolbarItem Name="Add Trip" Order="Primary" Priority="0" Activated="OnAdd" />
+      <ToolbarItem Name="Add City" Order="Primary" Priority="0" Activated="OnAdd" />
     </ContentPage.ToolbarItems>
 
-    <ListView x:Name="list" ItemsSource="{Binding Trips}" ItemTapped="OnItemTapped">
+    <ListView x:Name="list" ItemsSource="{Binding Cities}" ItemTapped="OnItemTapped">
         <ListView.ItemTemplate>
             <DataTemplate>
               <TextCell Text="{Binding Name}">
@@ -28,4 +31,4 @@
         </ListView.ItemTemplate>
     </ListView>
     
-</ContentPage>
+</this:ViewPage>

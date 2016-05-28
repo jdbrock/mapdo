@@ -10,19 +10,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Mapdo.Models;
 
-namespace Mapdo
+namespace Mapdo.ViewModels
 {
     [ImplementPropertyChanged]
-    public class DashboardViewModel : IViewModel
+    public class CityViewModel : IViewModel
     {
         // ===========================================================================
         // = Public Properties
         // ===========================================================================
         
-        public Trip Trip { get; set; }
+        public City City { get; set; }
 
-        public ObservableCollection<Poi> SearchResults { get; set; }
+        public ObservableCollection<Place> SearchResults { get; set; }
         public ObservableCollection<ExtendedPin> Pins { get; set; }
 
         public Boolean IsSearching { get; set; }
@@ -35,17 +36,17 @@ namespace Mapdo
         public Boolean IsPortrait { get; set; }
         public Boolean IsLandscape {  get { return !IsPortrait; } }
 
-        public DashboardView View { get; set; }
+        public Views.CityView View { get; set; }
 
         // ===========================================================================
         // = Construction
         // ===========================================================================
 
-        public DashboardViewModel(Trip trip)
+        public CityViewModel(City trip)
         {
-            Trip = trip;
+            City = trip;
 
-            SearchResults = new ObservableCollection<Poi>();
+            SearchResults = new ObservableCollection<Place>();
             Pins = new ObservableCollection<ExtendedPin>();
 
             OnItemDoneCommand = new Command(OnItemDone);
@@ -58,14 +59,14 @@ namespace Mapdo
 
         private void OnItemDone(Object obj)
         {
-            var item = obj as Poi;
+            var item = obj as Place;
             item.IsDone = !item.IsDone;
         }
 
         private async void OnItemMore(Object obj)
         {
-            var item = obj as Poi;
-            var result = await View.DisplayActionSheet(item.Name, "Cancel", "Delete Place", "Show Information", "View in Yelp", "Book an Uber");
+            var item = obj as Place;
+            var result = await View.DisplayActionSheet(item.Name, "Cancel", "Delete Place", "Show Info", "View in Yelp", "Book an Uber");
             var encode = (Func<String, String>)WebUtility.UrlEncode;
 
             switch (result)
@@ -75,20 +76,21 @@ namespace Mapdo
 
                 case "Delete Place":
                     {
-                        Trip.POIs.Remove(item);
+                        City.Places.Remove(item);
                         RaiseChanged();
                         break;
                     }
 
-                case "Show Information":
-                    {
-                        if (item.ExternalYelpData == null || String.IsNullOrWhiteSpace(item.ExternalYelpData.id))
-                            UserDialogs.Instance.ShowError("Yelp data missing.");
-                        else
-                            Navigate(new PoiInformationViewModel(item));
+                // TODO: Reinstate Show Info
+                //case "Show Info":
+                //    {
+                //        if (item.ExternalYelpData == null || String.IsNullOrWhiteSpace(item.ExternalYelpData.id))
+                //            UserDialogs.Instance.ShowError("Yelp data missing.");
+                //        else
+                //            Navigate(new PlaceInformationViewModel(item));
 
-                        break;
-                    }
+                //        break;
+                //    }
 
                 case "Book an Uber":
                     {
@@ -99,17 +101,16 @@ namespace Mapdo
                         break;
                     }
 
-                case "View in Yelp":
-                    if (item.ExternalYelpData == null || String.IsNullOrWhiteSpace(item.ExternalYelpData.id))
-                    {
-                        UserDialogs.Instance.ShowError("Yelp data missing.");
-                    }
-                    else
-                    {
-                        var uri = new Uri($"yelp:///biz/{item.ExternalYelpData.id}");
-                        Device.OpenUri(uri);
-                    }
-                    break;
+                // TODO: Reinstate View in Yelp
+                //case "View in Yelp":
+                //    if (item.ExternalYelpData == null || String.IsNullOrWhiteSpace(item.ExternalYelpData.id))
+                //        UserDialogs.Instance.ShowError("Yelp data missing.");
+                //    else
+                //    {
+                //        var uri = new Uri($"yelp:///biz/{item.ExternalYelpData.id}");
+                //        Device.OpenUri(uri);
+                //    }
+                //    break;
             }
         }
 

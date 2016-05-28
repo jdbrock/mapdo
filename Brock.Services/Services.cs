@@ -5,46 +5,72 @@ namespace Brock.Services
 {
     public static class Services
     {
-        private static Dictionary<Type, Object> RegisteredServices { get; set; }
+        // ===========================================================================
+        // = Public Properties
+        // ===========================================================================
 
-        public static IAssemblyService Assembly {  get { return Get<IAssemblyService>(); } }
+        public static IAssemblyService Assembly { get { return Get<IAssemblyService>(); } }
 
-        public static Func<Type, Type> GetBaseTypeFunc { get; set; }
-        public static Func<Type, IEnumerable<Type>> GetInterfacesFunc { get; set; }
+        // ===========================================================================
+        // = Private Fields
+        // ===========================================================================
 
+        private static Dictionary<Type, object> _services;
+
+        private static Func<Type, Type> _getBaseTypeFunc { get; set; }
+        private static Func<Type, IEnumerable<Type>> _getInterfacesFunc { get; set; }
+
+        // ===========================================================================
+        // = Construction
+        // ===========================================================================
+        
         static Services()
         {
-            RegisteredServices = new Dictionary<Type, Object>();
+            _services = new Dictionary<Type, Object>();
         }
 
+        public static void Initialize(Func<Type, Type> getBaseTypeFunc, Func<Type, IEnumerable<Type>> getInterfacesFunc)
+        {
+            _getBaseTypeFunc = getBaseTypeFunc;
+            _getInterfacesFunc = getInterfacesFunc;
+        }
+
+        // ===========================================================================
+        // = Public Methods
+        // ===========================================================================
+        
         public static T Get<T>()
         {
-            return (T)RegisteredServices[typeof(T)];
+            return (T)_services[typeof(T)];
         }
 
         public static void Register(Object inService)
         {
             foreach (var sometype in FindTypesRecursively(inService.GetType()))
-                RegisteredServices.Add(sometype, inService);
+                _services.Add(sometype, inService);
         }
 
+        // ===========================================================================
+        // = Private Methods
+        // ===========================================================================
+        
         private static IEnumerable<Type> FindTypesRecursively(Type inType)
         {
-            var baseType = GetBaseTypeFunc(inType);
+            var baseType = _getBaseTypeFunc(inType);
 
             while (baseType != null && baseType != typeof(Object))
             {
                 yield return baseType;
-                baseType = GetBaseTypeFunc(baseType);
+                baseType = _getBaseTypeFunc(baseType);
             }
 
-            var interfaces = GetInterfacesFunc(inType);
+            var interfaces = _getInterfacesFunc(inType);
 
             foreach (var item in interfaces)
             {
                 yield return item;
 
-                foreach (var subItem in GetInterfacesFunc(item))
+                foreach (var subItem in _getInterfacesFunc(item))
                     yield return subItem;
             }
         }

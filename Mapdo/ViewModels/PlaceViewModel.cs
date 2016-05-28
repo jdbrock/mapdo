@@ -1,4 +1,5 @@
-﻿using PropertyChanged;
+﻿using Mapdo.Models;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,24 +9,24 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace Mapdo
+namespace Mapdo.ViewModels
 {
     [ImplementPropertyChanged]
-    public class TripViewModel : IViewModel
+    public class PlaceViewModel : IViewModel
     {
         // ===========================================================================
         // = Public Properties
         // ===========================================================================
         
-        public ObservableCollection<Trip> Trips { get; set; }
+        public Place Place { get; set; }
 
         // ===========================================================================
         // = Construction
         // ===========================================================================
         
-        public TripViewModel()
+        public PlaceViewModel(Place place)
         {
-            Trips = new ObservableCollection<Trip>();
+            Place = place;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using PropertyChanged;
+﻿using Mapdo.Models;
+using PropertyChanged;
+using Realms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,24 +10,24 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace Mapdo
+namespace Mapdo.ViewModels
 {
     [ImplementPropertyChanged]
-    public class PoiInformationViewModel : IViewModel
+    public class CitiesViewModel : IViewModel
     {
         // ===========================================================================
         // = Public Properties
         // ===========================================================================
         
-        public Poi Poi { get; set; }
+        public RealmList<City> Cities { get; set; }
 
         // ===========================================================================
         // = Construction
         // ===========================================================================
         
-        public PoiInformationViewModel(Poi poi)
+        public CitiesViewModel()
         {
-            Poi = poi;
+            //Cities = new ObservableCollection<City>();
         }
     }
 }

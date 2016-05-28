@@ -1,5 +1,8 @@
 ﻿using Acr.UserDialogs;
 using Brock.Services;
+using Mapdo.Models;
+using Mapdo.ViewModels;
+using Realms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,30 +13,24 @@ using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using YelpSharp;
 
-namespace Mapdo
+namespace Mapdo.Views
 {
-    public partial class DashboardView : ContentPage
+    public partial class CityView : ViewPage<CityViewModel>
     {
-        // ===========================================================================
-        // = Public Properties
-        // ===========================================================================
-        
-        public DashboardViewModel ViewModel { get { return BindingContext as DashboardViewModel; } set { BindingContext = value; } }
-
         // ===========================================================================
         // = Construction
         // ===========================================================================
         
-        public DashboardView(DashboardViewModel vm)
+        public CityView(CityViewModel vm)
         {
-            ViewModel = vm;
-            ViewModel.View = this;
+            //ViewModel = vm;
+            //ViewModel.View = this;
 
             InitializeComponent();
 
             // Sort old data.
-            //ViewModel.Trip.POIs = new ObservableCollection<Poi>(
-            //    ViewModel.Trip.POIs
+            //ViewModel.Trip.Places = new ObservableCollection<Poi>(
+            //    ViewModel.Trip.Places
             //        .OrderBy(X => X.Name));
 
             //App.Save();
@@ -81,7 +78,7 @@ namespace Mapdo
 
         protected override void OnAppearing()
         {
-            var cityCenter = new Position(ViewModel.Trip.Latitude, ViewModel.Trip.Longitude);
+            var cityCenter = new Position(ViewModel.City.Latitude, ViewModel.City.Longitude);
             var citySpan = MapSpan.FromCenterAndRadius(cityCenter, Distance.FromMiles(10));
 
             map.MoveToRegion(citySpan);
@@ -105,23 +102,23 @@ namespace Mapdo
             var list = (ListView)sender;
             list.SelectedItem = null;
 
-            // Pan to POI.
-            var poi = (Poi)args.Item;
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(poi.Latitude, poi.Longitude), Distance.FromMiles(0.1)));
+            // Pan to place.
+            var place = (Place)args.Item;
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(place.Latitude, place.Longitude), Distance.FromMiles(0.1)));
         }
 
         public void OnSearchResultTapped(Object sender, ItemTappedEventArgs args)
         {
-            var poi = (Poi)args.Item;
+            var poi = (Place)args.Item;
             poi.IsSearchResult = false;
 
-            ViewModel.Trip.POIs.Add(poi);
+            ViewModel.City.Places.Add(poi);
 
-            ViewModel.Trip.POIs = new ObservableCollection<Poi>(
-                ViewModel.Trip.POIs
-                    .OrderBy(X => X.Name));
+            //ViewModel.City.Places = new RealmList<Place><>(
+            //    ViewModel.City.Places
+            //        .OrderBy(X => X.Name));
 
-            ViewModel.Pins.Add(CreateSavedPinFromPoi(poi));
+            ViewModel.Pins.Add(CreateSavedPinFromPlace(poi));
 
             ViewModel.IsSearching = false;
             ClearSearchResults();
@@ -139,36 +136,38 @@ namespace Mapdo
 
             using (var dialog = UserDialogs.Instance.Loading("Searching..."))
             {
-                var yelpClient = new YelpClient(App.Config.Yelp.AccessToken, App.Config.Yelp.AccessTokenSecret, App.Config.Yelp.ConsumerKey, App.Config.Yelp.ConsumerSecret);
-
+                var yelpClient          = new YelpClient(App.Config.Yelp.AccessToken, App.Config.Yelp.AccessTokenSecret, App.Config.Yelp.ConsumerKey, App.Config.Yelp.ConsumerSecret);
                 var yelpGeneralOptions  = new YelpSearchOptionsGeneral(query: searchBar.Text, radiusFilter: 25000);
-                var yelpLocationOptions = new YelpSearchOptionsLocation(ViewModel.Trip.Name);
+                var yelpLocationOptions = new YelpSearchOptionsLocation(ViewModel.City.Name);
                 var yelpSearchOptions   = new YelpSearchOptions(general: yelpGeneralOptions, location: yelpLocationOptions);
 
                 var yelpResults         = await yelpClient.SearchWithOptions(yelpSearchOptions);
 
                 ClearSearchResults();
 
-                var currentPois = new HashSet<String>(ViewModel.Trip.POIs
+                var currentPois = new HashSet<String>(ViewModel.City.Places
                     .Select(X => X.Address)
                     .Distinct());
 
-                foreach (var x in yelpResults.businesses)
+                foreach (var business in yelpResults.businesses)
                 {
-                    var poi = new Poi(x.name, x.location.coordinate.Latitude, x.location.coordinate.Longitude)
+                    var place = new Place
                     {
-                        Address = String.Join(", ", x.location.display_address),
+                        Name = business.name,
+                        Latitude = business.location.coordinate.Latitude,
+                        Longitude = business.location.coordinate.Longitude,
+                        Address = String.Join(", ", business.location.display_address),
                         IsSearchResult = true,
-                        ExternalYelpData = x
+                        //ExternalYelpData = business
                     };
 
-                    if (currentPois.Contains(poi.Address))
+                    if (currentPois.Contains(place.Address))
                         continue;
 
-                    var pin = CreateSearchResultPinFromPoi(poi);
+                    var pin = CreateSearchResultPinFromPlace(place);
 
                     ViewModel.Pins.Add(pin);
-                    ViewModel.SearchResults.Add(poi);
+                    ViewModel.SearchResults.Add(place);
                 }
 
                 var positions = ViewModel.SearchResults
@@ -189,21 +188,21 @@ namespace Mapdo
         {
             ViewModel.Pins.Clear();
 
-            foreach (var poi in ViewModel.Trip.POIs)
-                ViewModel.Pins.Add(CreateSavedPinFromPoi(poi));
+            foreach (var place in ViewModel.City.Places)
+                ViewModel.Pins.Add(CreateSavedPinFromPlace(place));
 
             if (ViewModel.IsSearching)
-                foreach (var poi in ViewModel.SearchResults)
-                    ViewModel.Pins.Add(CreateSearchResultPinFromPoi(poi));
+                foreach (var place in ViewModel.SearchResults)
+                    ViewModel.Pins.Add(CreateSearchResultPinFromPlace(place));
 
             RefreshMapRenderer();
         }
 
-        private ExtendedPin CreateSavedPinFromPoi(Poi poi)
+        private ExtendedPin CreateSavedPinFromPlace(Place place)
         {
-            return new ExtendedPin(poi.Name, poi.Address, poi.Latitude, poi.Longitude)
+            return new ExtendedPin(place.Name, place.Address, place.Latitude, place.Longitude)
             {
-                PinColor = poi.IsDone
+                PinColor = place.IsDone
                     ? StandardPinColor.Green
                     : StandardPinColor.Red,
 
@@ -211,9 +210,9 @@ namespace Mapdo
             };
         }
 
-        private ExtendedPin CreateSearchResultPinFromPoi(Poi poi)
+        private ExtendedPin CreateSearchResultPinFromPlace(Place place)
         {
-            return new ExtendedPin(poi.Name, poi.Address, poi.Latitude, poi.Longitude)
+            return new ExtendedPin(place.Name, place.Address, place.Latitude, place.Longitude)
             {
                 PinColor = StandardPinColor.Purple,
                 IsSearchResult = true

@@ -1,17 +1,19 @@
-﻿using Akavache;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reactive;
 using System.Reactive.Linq;
-
-using Xamarin.Forms;
-using PropertyChanged;
-using Xamarin.Forms.Maps;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.Reflection;
+
+using Xamarin.Forms;
+using Xamarin.Forms.Maps;
+
+using PropertyChanged;
+using Mapdo.ViewModels;
+using Mapdo.Models;
 
 namespace Mapdo
 {
@@ -28,33 +30,28 @@ namespace Mapdo
         // = Public Properties
         // ===========================================================================
 
-        public static Data Data { get; set; }
+        //public static Data Data { get; set; }
         public static Configuration Config { get; set; }
 
         // ===========================================================================
         // = Private Fields
         // ===========================================================================
         
-        private static TripViewModel _mainViewModel;
+        private static CitiesViewModel _mainViewModel;
 
         // ===========================================================================
         // = Construction
         // ===========================================================================
         
-        public App()
+        public App(AppSetup setup)
         {
-            BlobCache.ApplicationName = "Mapdo";
-            BlobCache.EnsureInitialized();
-
-            //ResetAllData();
-
-            Data = new Data();
+            AppContainer.Container = setup.CreateContainer(); 
 
             LoadConfiguration();
             LoadData();
 
-            _mainViewModel = new TripViewModel();
-            MainPage = new NavigationPage(new TripView(_mainViewModel));
+            _mainViewModel = new CitiesViewModel();
+            MainPage = new NavigationPage(new Views.CitiesView(_mainViewModel));
         }
 
         private void LoadConfiguration()
@@ -71,7 +68,7 @@ namespace Mapdo
 
         public static void Save()
         {
-            BlobCache.UserAccount.InsertObject("Configuration", Data);
+            //BlobCache.UserAccount.InsertObject("Configuration", Data);
         }
 
         // ===========================================================================
@@ -82,7 +79,7 @@ namespace Mapdo
         protected override void OnResume() { }
         protected override void OnSleep()
         {
-            BlobCache.UserAccount.Flush();
+            //BlobCache.UserAccount.Flush();
         }
 
         // ===========================================================================
@@ -91,39 +88,42 @@ namespace Mapdo
 
         private static void ResetAllData()
         {
-            BlobCache.UserAccount.InvalidateAll();
+            //BlobCache.UserAccount.InvalidateAll();
         }
 
         private static void LoadData()
         {
-            BlobCache.UserAccount.GetObject<Data>("Configuration")
-                .Subscribe(
-                next =>
-                {
-                    Data = next;
-                    _mainViewModel.Trips = Data.Trips;
-                },
-                error =>
-                {
-                    CreateMockupData();
-                    _mainViewModel.Trips = Data.Trips;
-                });
+            //BlobCache.UserAccount.GetObject<Data>("Configuration")
+            //    .Subscribe(
+            //    next =>
+            //    {
+            //        Data = next;
+            //        _mainViewModel.Cities = Data.Trips;
+            //    },
+            //    error =>
+            //    {
+            //        CreateMockupData();
+            //        _mainViewModel.Cities = Data.Trips;
+            //    });
         }
 
         private static void CreateMockupData()
         {
-            var trip = new Trip("Portland, OR");
+            var city = new City
+            {
+                Name = "Portland, OR"
+            };
 
             var gc = new Geocoder();
-            var pos = gc.GetPositionsForAddressAsync(trip.Name).Result.FirstOrDefault();
+            var pos = gc.GetPositionsForAddressAsync(city.Name).Result.FirstOrDefault();
 
             if (pos != null)
             {
-                trip.Latitude = pos.Latitude;
-                trip.Longitude = pos.Longitude;
+                city.Latitude = pos.Latitude;
+                city.Longitude = pos.Longitude;
             }
 
-            Data.Trips.Add(trip);
+            //Data.Trips.Add(trip);
             Save();
         }
     }

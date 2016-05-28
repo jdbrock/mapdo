@@ -1,4 +1,6 @@
 ﻿using Acr.UserDialogs;
+using Mapdo.Models;
+using Mapdo.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,23 +10,16 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
-namespace Mapdo
+namespace Mapdo.Views
 {
-    public partial class TripView : ContentPage
+    public partial class CitiesView : ViewPage<CitiesViewModel>
     {
-        // ===========================================================================
-        // = Public Properties
-        // ===========================================================================
-        
-        public TripViewModel ViewModel { get { return BindingContext as TripViewModel; } set { BindingContext = value; } }
-
         // ===========================================================================
         // = Construction
         // ===========================================================================
         
-        public TripView(TripViewModel viewModel)
+        public CitiesView(CitiesViewModel viewModel)
         {
-            ViewModel = viewModel;
             InitializeComponent();
         }
 
@@ -34,10 +29,10 @@ namespace Mapdo
         
         public void OnItemTapped(Object sender, ItemTappedEventArgs args)
         {
-            var trip = (Trip)args.Item;
+            var city = (City)args.Item;
 
-            var viewModel = new DashboardViewModel(trip);
-            var view = new DashboardView(viewModel);
+            var viewModel = new CityViewModel(city);
+            var view = new CityView(viewModel);
 
             Navigation.PushAsync(view);
         }
@@ -48,12 +43,15 @@ namespace Mapdo
 
             if (result.Ok)
             {
-                if (ViewModel.Trips.Any(X => X.Name.Equals(result.Text, StringComparison.OrdinalIgnoreCase)))
+                if (ViewModel.Cities.Any(X => X.Name.Equals(result.Text, StringComparison.OrdinalIgnoreCase)))
                     return;
 
                 using (var dialog = UserDialogs.Instance.Loading("Loading City..."))
                 {
-                    var trip = new Trip(result.Text);
+                    var trip = new City
+                    {
+                        Name = result.Text
+                    };
 
                     var gc = new Geocoder();
                     var pos = (await gc.GetPositionsForAddressAsync(trip.Name)).FirstOrDefault();
@@ -64,7 +62,7 @@ namespace Mapdo
                         trip.Longitude = pos.Longitude;
                     }
 
-                    ViewModel.Trips.Add(trip);
+                    ViewModel.Cities.Add(trip);
                     App.Save();
                 }
             }
@@ -73,14 +71,14 @@ namespace Mapdo
         private async void OnMenuItemDeleteClicked(object sender, EventArgs e)
         {
             var menuItem = (MenuItem)sender;
-            var trip = (Trip)menuItem.BindingContext;
+            var city = (City)menuItem.BindingContext;
 
-            var result = await DisplayAlert("Delete Trip", "Are you sure you want to remove this trip? Careful! This can't be undone.", "Delete Trip", "Cancel");
+            var result = await DisplayAlert("Delete City", "Are you sure you want to remove this city? Careful! This can't be undone.", "Delete City", "Cancel");
 
             if (!result)
                 return;
 
-            ViewModel.Trips.Remove(trip);
+            ViewModel.Cities.Remove(city);
             App.Save();
         }
     }

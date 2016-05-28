@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<this:ViewPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:vm="clr-namespace:Mapdo.ViewModels"
              xmlns:this="clr-namespace:Mapdo"
-             x:Class="Mapdo.DashboardView"
-             Title="{Binding Trip.Name}">
+             x:Class="Mapdo.Views.CityView"
+             x:TypeArguments="vm:CityViewModel"
+             Title="{Binding City.Name}">
 	<!--<Label Text="{Binding MainText}" VerticalOptions="Center" HorizontalOptions="Center" />-->
 
     <Grid RowSpacing="0" ColumnSpacing="0">
@@ -31,7 +33,7 @@
                 
             </SearchBar>
 
-            <ListView Grid.Row="1" x:Name="poiListView" ItemsSource="{Binding Trip.POIs}" ItemTapped="OnSavedItemTapped" SeparatorColor="#ddd">
+            <ListView Grid.Row="1" x:Name="poiListView" ItemsSource="{Binding City.Places}" ItemTapped="OnSavedItemTapped" SeparatorColor="#ddd">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                       <this:PoiViewCellSavedItem />
@@ -51,4 +53,4 @@
         </Grid>
     </Grid>
     
-</ContentPage>
+</this:ViewPage>

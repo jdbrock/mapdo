@@ -1,4 +1,5 @@
 ﻿using PropertyChanged;
+using Realms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using YelpSharp;
 
-namespace Mapdo
+namespace Mapdo.Models
 {
     [ImplementPropertyChanged]
-    public class Poi
+    public class Place : RealmObject
     {
-        // ===========================================================================
-        // = Public Properties
-        // ===========================================================================
-        
+        [Indexed]
         public String Name { get; set; }
 
         public Double Latitude { get; set; }
@@ -26,6 +24,7 @@ namespace Mapdo
         public Boolean IsSearchResult { get; set; }
         public Boolean IsDone { get; set; }
 
+        [Ignored]
         public Color Color
         {
             get
@@ -40,18 +39,7 @@ namespace Mapdo
             }
         }
 
-        public YelpBusiness ExternalYelpData { get; set; }
-
-        // ===========================================================================
-        // = Construction
-        // ===========================================================================
-
-        public Poi() { }
-        public Poi(String name, Double latitude, Double longitude)
-        {
-            Name = name;
-            Latitude = latitude;
-            Longitude = longitude;
-        }
+        // TODO: Reinstate ExternalYelpData
+        //public YelpBusiness ExternalYelpData { get; set; }
     }
 }

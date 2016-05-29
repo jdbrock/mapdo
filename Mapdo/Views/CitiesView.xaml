@@ -16,10 +16,10 @@
     <ListView.ItemTemplate>
       <DataTemplate>
         <TextCell Text="{Binding Name}">
-          <TextCell.ContextActions>
+          <!--<TextCell.ContextActions>-->
             <!--<MenuItem Text="Delete" Command="{Binding Source={x:Reference CitiesView}, Path=DeleteCity}" CommandParameter="{Binding}" />-->
             <!--<MenuItem Text="Hi" />-->
-          </TextCell.ContextActions>
+          <!--</TextCell.ContextActions>-->
         </TextCell>
 
 

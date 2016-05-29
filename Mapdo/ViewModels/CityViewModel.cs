@@ -1,5 +1,5 @@
 ﻿
-using Acr.UserDialogs;
+//using Acr.UserDialogs;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using Acr.UserDialogs;
+﻿//using Acr.UserDialogs;
 using Brock.Services;
 using Mapdo.Models;
 using Mapdo.ViewModels;
@@ -124,7 +124,7 @@ namespace Mapdo.Views
             ClearSearchResults();
             searchBar.Text = "";
 
-            UserDialogs.Instance.ShowSuccess("Saved to Map");
+            //UserDialogs.Instance.ShowSuccess("Saved to Map");
 
             RefreshMapRenderer();
             App.Save();
@@ -134,50 +134,52 @@ namespace Mapdo.Views
         {
             ViewModel.IsSearching = true;
 
-            using (var dialog = UserDialogs.Instance.Loading("Searching..."))
-            {
-                var yelpClient          = new YelpClient(App.Config.Yelp.AccessToken, App.Config.Yelp.AccessTokenSecret, App.Config.Yelp.ConsumerKey, App.Config.Yelp.ConsumerSecret);
-                var yelpGeneralOptions  = new YelpSearchOptionsGeneral(query: searchBar.Text, radiusFilter: 25000);
-                var yelpLocationOptions = new YelpSearchOptionsLocation(ViewModel.City.Name);
-                var yelpSearchOptions   = new YelpSearchOptions(general: yelpGeneralOptions, location: yelpLocationOptions);
+            await new Task(() => { });
 
-                var yelpResults         = await yelpClient.SearchWithOptions(yelpSearchOptions);
+            //using (var dialog = UserDialogs.Instance.Loading("Searching..."))
+            //{
+            //    var yelpClient          = new YelpClient(App.Config.Yelp.AccessToken, App.Config.Yelp.AccessTokenSecret, App.Config.Yelp.ConsumerKey, App.Config.Yelp.ConsumerSecret);
+            //    var yelpGeneralOptions  = new YelpSearchOptionsGeneral(query: searchBar.Text, radiusFilter: 25000);
+            //    var yelpLocationOptions = new YelpSearchOptionsLocation(ViewModel.City.Name);
+            //    var yelpSearchOptions   = new YelpSearchOptions(general: yelpGeneralOptions, location: yelpLocationOptions);
 
-                ClearSearchResults();
+            //    var yelpResults         = await yelpClient.SearchWithOptions(yelpSearchOptions);
 
-                var currentPois = new HashSet<String>(ViewModel.City.Places
-                    .Select(X => X.Address)
-                    .Distinct());
+            //    ClearSearchResults();
 
-                foreach (var business in yelpResults.businesses)
-                {
-                    var place = new Place
-                    {
-                        Name = business.name,
-                        Latitude = business.location.coordinate.Latitude,
-                        Longitude = business.location.coordinate.Longitude,
-                        Address = String.Join(", ", business.location.display_address),
-                        IsSearchResult = true,
-                        //ExternalYelpData = business
-                    };
+            //    var currentPois = new HashSet<String>(ViewModel.City.Places
+            //        .Select(X => X.Address)
+            //        .Distinct());
 
-                    if (currentPois.Contains(place.Address))
-                        continue;
+            //    foreach (var business in yelpResults.businesses)
+            //    {
+            //        var place = new Place
+            //        {
+            //            Name = business.name,
+            //            Latitude = business.location.coordinate.Latitude,
+            //            Longitude = business.location.coordinate.Longitude,
+            //            Address = String.Join(", ", business.location.display_address),
+            //            IsSearchResult = true,
+            //            //ExternalYelpData = business
+            //        };
 
-                    var pin = CreateSearchResultPinFromPlace(place);
+            //        if (currentPois.Contains(place.Address))
+            //            continue;
 
-                    ViewModel.Pins.Add(pin);
-                    ViewModel.SearchResults.Add(place);
-                }
+            //        var pin = CreateSearchResultPinFromPlace(place);
 
-                var positions = ViewModel.SearchResults
-                    .Select(X => new Position(X.Latitude, X.Longitude))
-                    .ToList();
+            //        ViewModel.Pins.Add(pin);
+            //        ViewModel.SearchResults.Add(place);
+            //    }
 
-                map.ZoomToExtent(positions);
+            //    var positions = ViewModel.SearchResults
+            //        .Select(X => new Position(X.Latitude, X.Longitude))
+            //        .ToList();
 
-                RefreshMapRenderer();
-            }
+            //    map.ZoomToExtent(positions);
+
+            //    RefreshMapRenderer();
+            //}
         }
 
         // ===========================================================================

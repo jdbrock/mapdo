@@ -1,4 +1,4 @@
-﻿using Acr.UserDialogs;
+﻿//using Acr.UserDialogs;
 using Mapdo.Models;
 using Mapdo.ViewModels;
 using System;
@@ -38,35 +38,36 @@ namespace Mapdo.Views
             Navigation.PushAsync(view);
         }
 
-        public async void OnAdd(Object sender, EventArgs args)
+        public async Task OnAdd(Object sender, EventArgs args)
         {
-            var result = await UserDialogs.Instance.PromptAsync("Where are you going? Enter a city and state.");
+            await new Task(() => { });
+            //var result = await UserDialogs.Instance.PromptAsync("Where are you going? Enter a city and state.");
 
-            if (result.Ok)
-            {
-                if (ViewModel.Cities.Any(X => X.Name.Equals(result.Text, StringComparison.OrdinalIgnoreCase)))
-                    return;
+            //if (result.Ok)
+            //{
+            //    if (ViewModel.Cities.Any(X => X.Name.Equals(result.Text, StringComparison.OrdinalIgnoreCase)))
+            //        return;
 
-                using (var dialog = UserDialogs.Instance.Loading("Loading City..."))
-                {
-                    var trip = new City
-                    {
-                        Name = result.Text
-                    };
+            //    using (var dialog = UserDialogs.Instance.Loading("Loading City..."))
+            //    {
+            //        var trip = new City
+            //        {
+            //            Name = result.Text
+            //        };
 
-                    var gc = new Geocoder();
-                    var pos = (await gc.GetPositionsForAddressAsync(trip.Name)).FirstOrDefault();
+            //        var gc = new Geocoder();
+            //        var pos = (await gc.GetPositionsForAddressAsync(trip.Name)).FirstOrDefault();
 
-                    if (pos != null) // TODO: error message
-                    {
-                        trip.Latitude = pos.Latitude;
-                        trip.Longitude = pos.Longitude;
-                    }
+            //        if (pos != null) // TODO: error message
+            //        {
+            //            trip.Latitude = pos.Latitude;
+            //            trip.Longitude = pos.Longitude;
+            //        }
 
-                    //ViewModel.Cities.Add(trip);
-                    App.Save();
-                }
-            }
+            //        //ViewModel.Cities.Add(trip);
+            //        App.Save();
+            //    }
+            //}
         }
 
         //private async void OnMenuItemDeleteClicked(object sender, EventArgs e)

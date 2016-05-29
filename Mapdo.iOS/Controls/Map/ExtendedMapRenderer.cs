@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using UIKit;
 using System.Threading.Tasks;
 using Xamarin.Geolocation;
-using BigTed;
+//using BigTed;
 using System.Linq;
 using System;
 using Mapdo;
@@ -192,9 +192,9 @@ namespace Mapdo.iOS
 		{
 			var geoLocator = new Geolocator();
 			try {
-				BTProgressHUD.Show(maskType: ProgressHUD.MaskType.Black); //shows the spinner
+				//BTProgressHUD.Show(maskType: ProgressHUD.MaskType.Black); //shows the spinner
 				var position = await geoLocator.GetPositionAsync (10000);
-				BTProgressHUD.Dismiss(); //dismiss the spinner
+				//BTProgressHUD.Dismiss(); //dismiss the spinner
 
 				SetMapCenter (position.Latitude, position.Longitude, UserLocationZoom);
 			} 

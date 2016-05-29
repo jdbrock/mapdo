@@ -1,13 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<this:ViewPage xmlns="http://xamarin.com/schemas/2014/forms"
+<v:CityViewBase xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:vm="clr-namespace:Mapdo.ViewModels"
+             xmlns:v="clr-namespace:Mapdo.Views"
              xmlns:this="clr-namespace:Mapdo"
              x:Class="Mapdo.Views.CityView"
-             x:TypeArguments="vm:CityViewModel"
              Title="{Binding City.Name}">
-	<!--<Label Text="{Binding MainText}" VerticalOptions="Center" HorizontalOptions="Center" />-->
 
     <Grid RowSpacing="0" ColumnSpacing="0">
       <Grid.ColumnDefinitions>
@@ -49,8 +48,7 @@
                 </ListView.ItemTemplate>
             </ListView>
             
-            <!--<Button Grid.Row="1" Text="Add" />-->
         </Grid>
     </Grid>
     
-</this:ViewPage>
+</v:CityViewBase>

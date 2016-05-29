@@ -1,4 +1,5 @@
 ﻿//using Acr.UserDialogs;
+using Acr.UserDialogs;
 using Brock.Services;
 using Mapdo.Models;
 using Mapdo.ViewModels;
@@ -15,50 +16,73 @@ using YelpSharp;
 
 namespace Mapdo.Views
 {
-    public partial class CityView : ViewPage<CityViewModel>
+    public class CityViewBase : ViewPage<CityViewModel> { }
+    public partial class CityView : CityViewBase
     {
+        // ===========================================================================
+        // = Private Fields
+        // ===========================================================================
+
+        private double? _lastWidthAllocated;
+        private double? _lastHeightAllocated;
+
         // ===========================================================================
         // = Construction
         // ===========================================================================
-        
-        public CityView(CityViewModel vm)
-        {
-            //ViewModel = vm;
-            //ViewModel.View = this;
 
+        public CityView()
+        {
             InitializeComponent();
 
-            // Sort old data.
-            //ViewModel.Trip.Places = new ObservableCollection<Poi>(
-            //    ViewModel.Trip.Places
-            //        .OrderBy(X => X.Name));
-
-            //App.Save();
-
-            vm.Changed += (S, E) => RecreatePins();
             searchBar.SearchButtonPressed += OnSearchButtonPressed;
             searchBar.TextChanged += OnSearchTextChanged;
 
-            vm.NavigationRequested += OnNavigationRequested;
+            //Realm.GetInstance().RealmChanged += OnRealmChanged;
         }
-
         // ===========================================================================
         // = Event Handling
         // ===========================================================================
 
-        private void OnNavigationRequested(object sender, NavigationRequestedArgs e)
-        {
-            var page = ViewHelper.CreateView(e.ViewModel);
-            Navigation.PushAsync(page);
-        }
+        //private void OnRealmChanged(object sender, EventArgs e)
+        //{
+        //}
 
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
 
-            ViewModel.IsPortrait = height > width;
+            _lastHeightAllocated = height;
+            _lastWidthAllocated = width;
 
-            if (ViewModel.IsPortrait)
+            RefreshRotation();
+        }
+
+        protected override void OnAppearing()
+        {
+            RefreshMapExtent();
+        }
+
+        public override void OnViewModelRefreshed(object sender, EventArgs args)
+        {
+            Refresh();
+        }
+
+        private void Refresh()
+        {
+            RefreshRotation();
+            RefreshMapExtent();
+        }
+
+        private void RefreshRotation()
+        {
+            if (!_lastHeightAllocated.HasValue || !_lastWidthAllocated.HasValue || ViewModel == null)
+                return;
+
+            var viewModel = ViewModel;
+            var width  = _lastWidthAllocated.Value;
+            var height = _lastHeightAllocated.Value;
+
+            if (height > width) // Portrait
             {
                 Grid.SetColumn(itemsGrid, 0);
                 Grid.SetRow(itemsGrid, 1);
@@ -66,7 +90,7 @@ namespace Mapdo.Views
                 itemsGrid.WidthRequest = 0;
                 itemsGrid.HeightRequest = height / 2;
             }
-            else
+            else // Landscape
             {
                 Grid.SetColumn(itemsGrid, 1);
                 Grid.SetRow(itemsGrid, 0);
@@ -76,8 +100,11 @@ namespace Mapdo.Views
             }
         }
 
-        protected override void OnAppearing()
+        private void RefreshMapExtent()
         {
+            if (ViewModel == null)
+                return;
+
             var cityCenter = new Position(ViewModel.City.Latitude, ViewModel.City.Longitude);
             var citySpan = MapSpan.FromCenterAndRadius(cityCenter, Distance.FromMiles(10));
 
@@ -109,77 +136,110 @@ namespace Mapdo.Views
 
         public void OnSearchResultTapped(Object sender, ItemTappedEventArgs args)
         {
-            var poi = (Place)args.Item;
-            poi.IsSearchResult = false;
+            try
+            {
+                var result = (SearchResult)args.Item;
 
-            ViewModel.City.Places.Add(poi);
+                Place place = null;
 
-            //ViewModel.City.Places = new RealmList<Place><>(
-            //    ViewModel.City.Places
-            //        .OrderBy(X => X.Name));
+                var realm = Realm.GetInstance();
+                realm.Write(() =>
+                {
+                    // TODO: AutoMapper.
+                    place = realm.CreateObject<Place>();
+                    place.Address   = result.Address;
+                    place.Latitude  = result.Latitude;
+                    place.Longitude = result.Longitude;
+                    place.Name      = result.Name;
+                    place.IsDone    = false;
+                    //place.Parent    = ViewModel.City.Name;
 
-            ViewModel.Pins.Add(CreateSavedPinFromPlace(poi));
+                    ViewModel.City.Places.Add(place);
+                    ViewModel.City = ViewModel.City;
+                });
 
-            ViewModel.IsSearching = false;
-            ClearSearchResults();
-            searchBar.Text = "";
+                if (place == null)
+                    throw new Exception($"Failed to write '{typeof(Place).Name}' instance.");
+
+                ViewModel.Pins.Add(CreateSavedPinFromPlace(place));
+
+                UserDialogs.Instance.ShowSuccess("Saved to Map");
+            }
+            finally
+            {
+                ViewModel.IsSearching = false;
+
+                searchBar.Text = String.Empty;
+                ClearSearchResults();
+
+                RefreshMapRenderer();
+            }
+
+            //var poi = (Place)args.Item;
+            //poi.IsSearchResult = false;
+
+            //ViewModel.City.Places.Add(poi);
+
+            //ViewModel.Pins.Add(CreateSavedPinFromPlace(poi));
+
+            //ViewModel.IsSearching = false;
+            //ClearSearchResults();
+            //searchBar.Text = "";
 
             //UserDialogs.Instance.ShowSuccess("Saved to Map");
 
-            RefreshMapRenderer();
-            App.Save();
+            //RefreshMapRenderer();
+            //App.Save();
         }
 
         private async void OnSearchButtonPressed(object sender, EventArgs e)
         {
             ViewModel.IsSearching = true;
 
-            await new Task(() => { });
+            using (var dialog = UserDialogs.Instance.Loading("Searching..."))
+            {
+                var yelpClient = new YelpClient(App.Config.Yelp.AccessToken, App.Config.Yelp.AccessTokenSecret, App.Config.Yelp.ConsumerKey, App.Config.Yelp.ConsumerSecret);
+                var yelpGeneralOptions = new YelpSearchOptionsGeneral(query: searchBar.Text, radiusFilter: 25000);
+                var yelpLocationOptions = new YelpSearchOptionsLocation(ViewModel.City.Name);
+                var yelpSearchOptions = new YelpSearchOptions(general: yelpGeneralOptions, location: yelpLocationOptions);
 
-            //using (var dialog = UserDialogs.Instance.Loading("Searching..."))
-            //{
-            //    var yelpClient          = new YelpClient(App.Config.Yelp.AccessToken, App.Config.Yelp.AccessTokenSecret, App.Config.Yelp.ConsumerKey, App.Config.Yelp.ConsumerSecret);
-            //    var yelpGeneralOptions  = new YelpSearchOptionsGeneral(query: searchBar.Text, radiusFilter: 25000);
-            //    var yelpLocationOptions = new YelpSearchOptionsLocation(ViewModel.City.Name);
-            //    var yelpSearchOptions   = new YelpSearchOptions(general: yelpGeneralOptions, location: yelpLocationOptions);
+                var yelpResults = await yelpClient.SearchWithOptions(yelpSearchOptions);
 
-            //    var yelpResults         = await yelpClient.SearchWithOptions(yelpSearchOptions);
+                ClearSearchResults();
 
-            //    ClearSearchResults();
+                var currentPois = new HashSet<String>(ViewModel.City.Places
+                    .Select(X => X.Address)
+                    .Distinct());
 
-            //    var currentPois = new HashSet<String>(ViewModel.City.Places
-            //        .Select(X => X.Address)
-            //        .Distinct());
+                foreach (var business in yelpResults.businesses)
+                {
+                    var result = new SearchResult
+                    {
+                        Name = business.name,
+                        Latitude = business.location.coordinate.Latitude,
+                        Longitude = business.location.coordinate.Longitude,
+                        Address = String.Join(", ", business.location.display_address),
+                        //IsSearchResult = true,
+                        //ExternalYelpData = business
+                    };
 
-            //    foreach (var business in yelpResults.businesses)
-            //    {
-            //        var place = new Place
-            //        {
-            //            Name = business.name,
-            //            Latitude = business.location.coordinate.Latitude,
-            //            Longitude = business.location.coordinate.Longitude,
-            //            Address = String.Join(", ", business.location.display_address),
-            //            IsSearchResult = true,
-            //            //ExternalYelpData = business
-            //        };
+                    if (currentPois.Contains(result.Address))
+                        continue;
 
-            //        if (currentPois.Contains(place.Address))
-            //            continue;
+                    var pin = CreateSearchResultPinFromPlace(result);
 
-            //        var pin = CreateSearchResultPinFromPlace(place);
+                    ViewModel.Pins.Add(pin);
+                    ViewModel.SearchResults.Add(result);
+                }
 
-            //        ViewModel.Pins.Add(pin);
-            //        ViewModel.SearchResults.Add(place);
-            //    }
+                var positions = ViewModel.SearchResults
+                    .Select(X => new Position(X.Latitude, X.Longitude))
+                    .ToList();
 
-            //    var positions = ViewModel.SearchResults
-            //        .Select(X => new Position(X.Latitude, X.Longitude))
-            //        .ToList();
+                map.ZoomToExtent(positions);
 
-            //    map.ZoomToExtent(positions);
-
-            //    RefreshMapRenderer();
-            //}
+                RefreshMapRenderer();
+            }
         }
 
         // ===========================================================================
@@ -190,12 +250,13 @@ namespace Mapdo.Views
         {
             ViewModel.Pins.Clear();
 
-            foreach (var place in ViewModel.City.Places)
-                ViewModel.Pins.Add(CreateSavedPinFromPlace(place));
+            if (ViewModel.City.Places != null)
+                foreach (var place in ViewModel.City.Places)
+                    ViewModel.Pins.Add(CreateSavedPinFromPlace(place));
 
             if (ViewModel.IsSearching)
-                foreach (var place in ViewModel.SearchResults)
-                    ViewModel.Pins.Add(CreateSearchResultPinFromPlace(place));
+                foreach (var result in ViewModel.SearchResults)
+                    ViewModel.Pins.Add(CreateSearchResultPinFromPlace(result));
 
             RefreshMapRenderer();
         }
@@ -212,9 +273,9 @@ namespace Mapdo.Views
             };
         }
 
-        private ExtendedPin CreateSearchResultPinFromPlace(Place place)
+        private ExtendedPin CreateSearchResultPinFromPlace(SearchResult result)
         {
-            return new ExtendedPin(place.Name, place.Address, place.Latitude, place.Longitude)
+            return new ExtendedPin(result.Name, result.Address, result.Latitude, result.Longitude)
             {
                 PinColor = StandardPinColor.Purple,
                 IsSearchResult = true

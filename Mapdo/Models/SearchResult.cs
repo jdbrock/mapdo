@@ -1,23 +1,24 @@
-﻿using PropertyChanged;
-using Realms;
+﻿using Realms;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Mapdo.Models
 {
-    [ImplementPropertyChanged]
-    public class City : RealmObject
+    public class SearchResult
     {
-        [ObjectId]
+        [Indexed]
         public String Name { get; set; }
 
         public Double Latitude { get; set; }
         public Double Longitude { get; set; }
 
-        public RealmList<Place> Places { get; }
+        public String Address { get; set; }
+
+        [Ignored]
+        public Color Color => Color.FromRgb(193, 82, 216);
     }
 }

@@ -8,27 +8,18 @@
              x:Name="CitiesView"
              Title="Cities">
 
-  <!--<v:CitiesViewBase.ToolbarItems>
-    <ToolbarItem Name="Add City" Order="Primary" Priority="0" Activated="OnAdd" />
-  </v:CitiesViewBase.ToolbarItems>-->
+  <v:CitiesViewBase.ToolbarItems>
+    <ToolbarItem Name="Add City" Order="Primary" Priority="0" Activated="OnAddCity" />
+  </v:CitiesViewBase.ToolbarItems>
 
-  <ListView x:Name="list" ItemsSource="{Binding Cities}" ItemTapped="OnItemTapped">
+  <ListView x:Name="list" ItemsSource="{Binding Cities}" ItemTapped="OnCityTapped">
     <ListView.ItemTemplate>
       <DataTemplate>
         <TextCell Text="{Binding Name}">
-          <!--<TextCell.ContextActions>-->
-            <!--<MenuItem Text="Delete" Command="{Binding Source={x:Reference CitiesView}, Path=DeleteCity}" CommandParameter="{Binding}" />-->
-            <!--<MenuItem Text="Hi" />-->
-          <!--</TextCell.ContextActions>-->
+          <TextCell.ContextActions>
+            <MenuItem Text="Delete" Command="{Binding Source={x:Reference CitiesView}, Path=ViewModel.DeleteCity}" IsDestructive="True" CommandParameter="{Binding}" />
+          </TextCell.ContextActions>
         </TextCell>
-
-
-        <!--var menuItemMore = new MenuItem();
-              menuItemMore.Text = "Options";
-              menuItemMore.IsDestructive = false;
-              menuItemMore.Clicked += OnMenuItemMoreClicked;
-              ContextActions.Add(menuItemMore);-->
-
       </DataTemplate>
     </ListView.ItemTemplate>
   </ListView>

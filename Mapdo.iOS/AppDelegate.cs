@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xamarin.Themes;
-using Xamarin.Themes.Core;
+//using Xamarin.Themes;
+//using Xamarin.Themes.Core;
 using Foundation;
 using UIKit;
 using Brock.Services;
@@ -30,11 +30,11 @@ namespace Mapdo.iOS
             InitializeXamarin();
 
             // Create app.
-            var app = new App(new AppSetup());
+            var app = new App();
 
             // Further initialization.
             InitializeHockeyApp();
-            InitializeLegacyServices();
+            //InitializeLegacyServices();
 
             // Load app.
             LoadApplication(app);
@@ -51,14 +51,14 @@ namespace Mapdo.iOS
             hockeyManager.StartManager();
         }
 
-        private void InitializeLegacyServices()
-        {
-            Services.Initialize(
-                T => T.BaseType,
-                T => T.FindInterfaces((X, Y) => true, null));
+        //private void InitializeLegacyServices()
+        //{
+        //    Services.Initialize(
+        //        T => T.BaseType,
+        //        T => T.FindInterfaces((X, Y) => true, null));
 
-            Services.Register(new AssemblyService());
-        }
+        //    Services.Register(new AssemblyService());
+        //}
 
         private void InitializeXamarin()
         {

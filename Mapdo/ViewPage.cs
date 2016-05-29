@@ -8,16 +8,26 @@ using Xamarin.Forms;
 
 namespace Mapdo
 {
-    public class ViewPage<T> : ContentPage where T : IViewModel
+    public abstract class ViewPage<T> : ContentPage where T : IViewModel
     {
-        public T ViewModel { get; }
-
-        public ViewPage()
+        private T _viewModel;
+        public T ViewModel
         {
-            using (var scope = AppContainer.Container.BeginLifetimeScope())
-                ViewModel = AppContainer.Container.Resolve<T>();
-
-            BindingContext = ViewModel;
+            get { return _viewModel; }
+            set { var oldViewModel = _viewModel; _viewModel = value; BindingContext = _viewModel; OnViewModelChanged(oldViewModel, _viewModel); }
         }
+
+        public void OnViewModelChanged(IViewModel oldViewModel, IViewModel newViewModel)
+        {
+            if (oldViewModel != null)
+                oldViewModel.StateChanged -= OnViewModelRefreshed;
+
+            if (newViewModel != null)
+                newViewModel.StateChanged += OnViewModelRefreshed;
+
+            OnViewModelRefreshed(this, EventArgs.Empty);
+        }
+
+        public virtual void OnViewModelRefreshed(object sender, EventArgs args) { }
     }
 }

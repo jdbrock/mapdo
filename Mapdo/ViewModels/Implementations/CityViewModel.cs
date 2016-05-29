@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Mapdo.Models;
+using Realms;
 
 namespace Mapdo.ViewModels
 {
     [ImplementPropertyChanged]
-    public class CityViewModel : IViewModel
+    public class CityViewModel : ViewModelBase
     {
         // ===========================================================================
         // = Public Properties
@@ -23,18 +24,16 @@ namespace Mapdo.ViewModels
         
         public City City { get; set; }
 
-        public ObservableCollection<Place> SearchResults { get; set; }
+        //public IEnumerable<Place> Places { get; set; }
+        public ObservableCollection<SearchResult> SearchResults { get; set; }
         public ObservableCollection<ExtendedPin> Pins { get; set; }
 
         public Boolean IsSearching { get; set; }
         public ICommand OnItemDoneCommand { get; set; }
         public ICommand OnItemMoreCommand { get; set; }
 
-        public event EventHandler Changed;
-        public event EventHandler<NavigationRequestedArgs> NavigationRequested;
-
-        public Boolean IsPortrait { get; set; }
-        public Boolean IsLandscape {  get { return !IsPortrait; } }
+        //public event EventHandler Changed;
+        //public event EventHandler<NavigationRequestedArgs> NavigationRequested;
 
         public Views.CityView View { get; set; }
 
@@ -42,11 +41,9 @@ namespace Mapdo.ViewModels
         // = Construction
         // ===========================================================================
 
-        public CityViewModel(City city)
+        public CityViewModel()
         {
-            City = city;
-
-            SearchResults = new ObservableCollection<Place>();
+            SearchResults = new ObservableCollection<SearchResult>();
             Pins = new ObservableCollection<ExtendedPin>();
 
             OnItemDoneCommand = new Command(OnItemDone);
@@ -76,8 +73,8 @@ namespace Mapdo.ViewModels
 
                 case "Delete Place":
                     {
-                        City.Places.Remove(item);
-                        RaiseChanged();
+                        //City.Places.Remove(item);
+                        //RaiseChanged();
                         break;
                     }
 
@@ -114,16 +111,16 @@ namespace Mapdo.ViewModels
             }
         }
 
-        private void Navigate(IViewModel viewModel)
-        {
-            var handler = NavigationRequested;
-            if (handler != null)
-                handler(this, new NavigationRequestedArgs(viewModel));
-        }
+        //private void Navigate(IViewModel viewModel)
+        //{
+        //    var handler = NavigationRequested;
+        //    if (handler != null)
+        //        handler(this, new NavigationRequestedArgs(viewModel));
+        //}
 
-        private void RaiseChanged()
-        {
-            Changed?.Invoke(this, EventArgs.Empty);
-        }
+        //private void RaiseChanged()
+        //{
+        //    Changed?.Invoke(this, EventArgs.Empty);
+        //}
     }
 }

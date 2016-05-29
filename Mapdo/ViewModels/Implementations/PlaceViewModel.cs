@@ -12,7 +12,7 @@ using Xamarin.Forms;
 namespace Mapdo.ViewModels
 {
     [ImplementPropertyChanged]
-    public class PlaceViewModel : IViewModel
+    public class PlaceViewModel : ViewModelBase
     {
         // ===========================================================================
         // = Public Properties

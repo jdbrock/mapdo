@@ -14,6 +14,7 @@ using Mapdo.ViewModels;
 using Mapdo.Models;
 using Mapdo.Views;
 using Realms;
+using Mapdo.Bootstrap;
 
 namespace Mapdo
 {
@@ -43,21 +44,14 @@ namespace Mapdo
         // = Construction
         // ===========================================================================
         
-        public App(AppSetup setup)
+        public App()
         {
-            AppContainer.Container = setup.CreateContainer(); 
+            var bootstrapper = new AppBootstrapper(this);
+            bootstrapper.Run();
 
             LoadConfiguration();
             CreateInitialData();
-
-
-
             LoadData();
-
-            MainPage = new NavigationPage(new CitiesView());
-
-            //_mainViewModel = new CitiesViewModel();
-            //MainPage = new NavigationPage(new Views.CitiesView(_mainViewModel));
         }
 
         private void LoadConfiguration()

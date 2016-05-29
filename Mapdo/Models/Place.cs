@@ -21,16 +21,18 @@ namespace Mapdo.Models
 
         public String Address { get; set; }
 
-        public Boolean IsSearchResult { get; set; }
         public Boolean IsDone { get; set; }
+
+        //[Indexed]
+        //public String Parent { get; set; }
 
         [Ignored]
         public Color Color
         {
             get
             {
-                if (IsSearchResult)
-                    return Color.FromRgb(193, 82, 216);
+                //if (IsSearchResult)
+                //    return Color.FromRgb(193, 82, 216);
 
                 if (IsDone)
                     return Color.FromRgb(44, 211, 84); // TODO

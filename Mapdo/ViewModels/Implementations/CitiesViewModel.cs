@@ -1,4 +1,5 @@
-﻿using Mapdo.Models;
+﻿using Acr.UserDialogs;
+using Mapdo.Models;
 using PropertyChanged;
 using Realms;
 using System;
@@ -13,7 +14,7 @@ using Xamarin.Forms;
 namespace Mapdo.ViewModels
 {
     [ImplementPropertyChanged]
-    public class CitiesViewModel : IViewModel
+    public class CitiesViewModel : ViewModelBase
     {
         // ===========================================================================
         // = Public Properties
@@ -38,7 +39,7 @@ namespace Mapdo.ViewModels
         // = Private Methods - Command Implementations
         // ===========================================================================
         
-        private void DoDeleteCity(object obj)
+        private async void DoDeleteCity(object obj)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
@@ -46,10 +47,19 @@ namespace Mapdo.ViewModels
             if (!(obj is City))
                 throw new ArgumentException($"Unexpected type '{obj.GetType().Name}'. Expected {typeof(City).Name}.");
 
+            var confirm = await UserDialogs.Instance.ConfirmAsync("Are you sure you want to delete this city? This can't be undone.", "Delete City", "Delete City", "Cancel");
+
+            if (!confirm)
+                return;
+
             var city = (City)obj;
 
             var realm = Realm.GetInstance();
-            realm.Remove(city);
+
+            realm.Write(() =>
+            {
+                realm.Remove(city);
+            });
         }
     }
 }

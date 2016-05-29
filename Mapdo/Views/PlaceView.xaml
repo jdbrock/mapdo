@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<this:ViewPage xmlns="http://xamarin.com/schemas/2014/forms"
+<v:PlaceViewBase xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:this="clr-namespace:Mapdo"
              xmlns:vm="clr-namespace:Mapdo.ViewModels"
+             xmlns:v="clr-namespace:Mapdo.Views"
              x:Class="Mapdo.Views.PlaceView"
-             x:TypeArguments="vm:PlaceViewModel"
              Title="{Binding Place.Name}">
 
   <StackLayout Padding="20" Spacing="5">
@@ -22,4 +22,4 @@
     </ListView>
   </StackLayout>
   
-</this:ViewPage>
+</v:PlaceViewBase>

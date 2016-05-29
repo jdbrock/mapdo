@@ -9,7 +9,8 @@ using Xamarin.Forms;
 
 namespace Mapdo.Views
 {
-    public partial class PlaceView : ViewPage<PlaceViewModel>
+    public class PlaceViewBase : ViewPage<PlaceViewModel> { }
+    public partial class PlaceView : PlaceViewBase
     {
         public PlaceView()
         {

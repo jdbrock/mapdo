@@ -1,6 +1,8 @@
-﻿//using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using Mapdo.Models;
+using Mapdo.Services;
 using Mapdo.ViewModels;
+using Realms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +18,19 @@ namespace Mapdo.Views
     public partial class CitiesView : CitiesViewBase
     {
         // ===========================================================================
+        // = Private Fields
+        // ===========================================================================
+
+        private INavigationService _navigation;
+
+        // ===========================================================================
         // = Construction
         // ===========================================================================
-        
-        public CitiesView()
+
+        public CitiesView(INavigationService navigation)
         {
+            _navigation = navigation;
+
             InitializeComponent();
         }
 
@@ -28,60 +38,52 @@ namespace Mapdo.Views
         // = Event Handling
         // ===========================================================================
         
-        public void OnItemTapped(Object sender, ItemTappedEventArgs args)
+        public void OnCityTapped(Object sender, ItemTappedEventArgs args)
         {
             var city = (City)args.Item;
 
-            var viewModel = new CityViewModel(city);
-            var view = new CityView(viewModel);
+            _navigation.PushAsync<CityViewModel>(vm =>
+            {
+                var realm = Realm.GetInstance();
+                var cityName = city.Name;
 
-            Navigation.PushAsync(view);
+                vm.City = city;
+            });
         }
 
-        public async Task OnAdd(Object sender, EventArgs args)
+        public async void OnAddCity(Object sender, EventArgs args)
         {
-            await new Task(() => { });
-            //var result = await UserDialogs.Instance.PromptAsync("Where are you going? Enter a city and state.");
+            var realm = Realm.GetInstance();
+            var prompt = await UserDialogs.Instance.PromptAsync("Where are you going?");
 
-            //if (result.Ok)
-            //{
-            //    if (ViewModel.Cities.Any(X => X.Name.Equals(result.Text, StringComparison.OrdinalIgnoreCase)))
-            //        return;
+            if (prompt.Ok)
+            {
+                var cityName = prompt.Text;
 
-            //    using (var dialog = UserDialogs.Instance.Loading("Loading City..."))
-            //    {
-            //        var trip = new City
-            //        {
-            //            Name = result.Text
-            //        };
+                if (realm.All<City>().Any(X => X.Name == cityName))
+                    return;
 
-            //        var gc = new Geocoder();
-            //        var pos = (await gc.GetPositionsForAddressAsync(trip.Name)).FirstOrDefault();
+                using (var dialog = UserDialogs.Instance.Loading("Loading..."))
+                {
+                    if (String.IsNullOrWhiteSpace(cityName))
+                        return;
 
-            //        if (pos != null) // TODO: error message
-            //        {
-            //            trip.Latitude = pos.Latitude;
-            //            trip.Longitude = pos.Longitude;
-            //        }
+                    var geocoder = new Geocoder();
+                    var position = (await geocoder.GetPositionsForAddressAsync(prompt.Text)).FirstOrDefault();
 
-            //        //ViewModel.Cities.Add(trip);
-            //        App.Save();
-            //    }
-            //}
+                    if (position == null)
+                        return;
+
+                    realm.Write(() =>
+                    {
+                        var city = realm.CreateObject<City>();
+
+                        city.Name = cityName;
+                        city.Latitude = position.Latitude;
+                        city.Longitude = position.Longitude;
+                    });
+                }
+            }
         }
-
-        //private async void OnMenuItemDeleteClicked(object sender, EventArgs e)
-        //{
-        //    var menuItem = (MenuItem)sender;
-        //    var city = (City)menuItem.BindingContext;
-
-        //    var result = await DisplayAlert("Delete City", "Are you sure you want to remove this city? Careful! This can't be undone.", "Delete City", "Cancel");
-
-        //    if (!result)
-        //        return;
-
-        //    //ViewModel.Cities.Remove(city);
-        //    App.Save();
-        //}
     }
 }

@@ -19,7 +19,9 @@ namespace Mapdo
 
         protected virtual void RegisterDependencies(ContainerBuilder cb)
         {
-            cb.RegisterType<CityViewModel>().SingleInstance();
+            cb.RegisterType<CitiesViewModel>().SingleInstance();
+            cb.RegisterType<CityViewModel>();
+            cb.RegisterType<PlaceViewModel>();
         }
     }
 }

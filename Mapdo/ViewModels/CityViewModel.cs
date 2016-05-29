@@ -42,9 +42,9 @@ namespace Mapdo.ViewModels
         // = Construction
         // ===========================================================================
 
-        public CityViewModel(City trip)
+        public CityViewModel(City city)
         {
-            City = trip;
+            City = city;
 
             SearchResults = new ObservableCollection<Place>();
             Pins = new ObservableCollection<ExtendedPin>();

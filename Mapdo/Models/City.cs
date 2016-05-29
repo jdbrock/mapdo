@@ -18,6 +18,6 @@ namespace Mapdo.Models
         public Double Latitude { get; set; }
         public Double Longitude { get; set; }
 
-        public RealmList<Place> Places { get; set; }
+        public RealmList<Place> Places { get; }
     }
 }

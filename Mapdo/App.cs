@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.Reflection;
@@ -14,6 +12,8 @@ using Xamarin.Forms.Maps;
 using PropertyChanged;
 using Mapdo.ViewModels;
 using Mapdo.Models;
+using Mapdo.Views;
+using Realms;
 
 namespace Mapdo
 {
@@ -37,7 +37,7 @@ namespace Mapdo
         // = Private Fields
         // ===========================================================================
         
-        private static CitiesViewModel _mainViewModel;
+        //private static CitiesViewModel _mainViewModel;
 
         // ===========================================================================
         // = Construction
@@ -48,10 +48,16 @@ namespace Mapdo
             AppContainer.Container = setup.CreateContainer(); 
 
             LoadConfiguration();
+            CreateInitialData();
+
+
+
             LoadData();
 
-            _mainViewModel = new CitiesViewModel();
-            MainPage = new NavigationPage(new Views.CitiesView(_mainViewModel));
+            MainPage = new NavigationPage(new CitiesView());
+
+            //_mainViewModel = new CitiesViewModel();
+            //MainPage = new NavigationPage(new Views.CitiesView(_mainViewModel));
         }
 
         private void LoadConfiguration()
@@ -107,24 +113,21 @@ namespace Mapdo
             //    });
         }
 
-        private static void CreateMockupData()
+        private static void CreateInitialData()
         {
-            var city = new City
+            var realm = Realm.GetInstance();
+
+            if (realm.All<City>().Any())
+                return;
+
+            realm.Write(() =>
             {
-                Name = "Portland, OR"
-            };
+                var city = realm.CreateObject<City>();
 
-            var gc = new Geocoder();
-            var pos = gc.GetPositionsForAddressAsync(city.Name).Result.FirstOrDefault();
-
-            if (pos != null)
-            {
-                city.Latitude = pos.Latitude;
-                city.Longitude = pos.Longitude;
-            }
-
-            //Data.Trips.Add(trip);
-            Save();
+                city.Name = "Portland, OR";
+                city.Latitude = 45.5231d;
+                city.Longitude = -122.6765d;
+            });
         }
     }
 }

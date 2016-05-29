@@ -12,13 +12,14 @@ using Xamarin.Forms.Maps;
 
 namespace Mapdo.Views
 {
-    public partial class CitiesView : ViewPage<CitiesViewModel>
+    public class CitiesViewBase : ViewPage<CitiesViewModel> { }
+    public partial class CitiesView : CitiesViewBase
     {
         // ===========================================================================
         // = Construction
         // ===========================================================================
         
-        public CitiesView(CitiesViewModel viewModel)
+        public CitiesView()
         {
             InitializeComponent();
         }
@@ -62,24 +63,24 @@ namespace Mapdo.Views
                         trip.Longitude = pos.Longitude;
                     }
 
-                    ViewModel.Cities.Add(trip);
+                    //ViewModel.Cities.Add(trip);
                     App.Save();
                 }
             }
         }
 
-        private async void OnMenuItemDeleteClicked(object sender, EventArgs e)
-        {
-            var menuItem = (MenuItem)sender;
-            var city = (City)menuItem.BindingContext;
+        //private async void OnMenuItemDeleteClicked(object sender, EventArgs e)
+        //{
+        //    var menuItem = (MenuItem)sender;
+        //    var city = (City)menuItem.BindingContext;
 
-            var result = await DisplayAlert("Delete City", "Are you sure you want to remove this city? Careful! This can't be undone.", "Delete City", "Cancel");
+        //    var result = await DisplayAlert("Delete City", "Are you sure you want to remove this city? Careful! This can't be undone.", "Delete City", "Cancel");
 
-            if (!result)
-                return;
+        //    if (!result)
+        //        return;
 
-            ViewModel.Cities.Remove(city);
-            App.Save();
-        }
+        //    //ViewModel.Cities.Remove(city);
+        //    App.Save();
+        //}
     }
 }

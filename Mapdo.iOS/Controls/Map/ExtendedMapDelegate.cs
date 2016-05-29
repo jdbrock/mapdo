@@ -119,7 +119,7 @@ namespace Mapdo.iOS
 
         private UIImageView GetImage(ExtendedPin poi)
         {
-            var imageView = new UIImageView(new CGRect(5f, 5f, 75f, 75f));
+            var imageView = new UIImageView(new CGRect(5d, 5d, 75d, 75d));
 
             if (poi.ImageUrl != null)
                 Task.Run(async () =>

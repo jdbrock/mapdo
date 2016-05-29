@@ -19,7 +19,8 @@ namespace Mapdo.ViewModels
         // = Public Properties
         // ===========================================================================
         
-        public RealmList<City> Cities { get; set; }
+        public RealmResults<City> Cities { get; }
+        public ICommand DeleteCity { get; }
 
         // ===========================================================================
         // = Construction
@@ -27,7 +28,28 @@ namespace Mapdo.ViewModels
         
         public CitiesViewModel()
         {
-            //Cities = new ObservableCollection<City>();
+            var realm = Realm.GetInstance();
+            Cities = realm.All<City>();
+
+            DeleteCity = new Command(DoDeleteCity);
+        }
+
+        // ===========================================================================
+        // = Private Methods - Command Implementations
+        // ===========================================================================
+        
+        private void DoDeleteCity(object obj)
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+
+            if (!(obj is City))
+                throw new ArgumentException($"Unexpected type '{obj.GetType().Name}'. Expected {typeof(City).Name}.");
+
+            var city = (City)obj;
+
+            var realm = Realm.GetInstance();
+            realm.Remove(city);
         }
     }
 }

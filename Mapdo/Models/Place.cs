@@ -2,6 +2,7 @@
 using Realms;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,23 +24,21 @@ namespace Mapdo.Models
 
         public Boolean IsDone { get; set; }
 
+
         //[Indexed]
         //public String Parent { get; set; }
 
-        [Ignored]
-        public Color Color
-        {
-            get
-            {
-                //if (IsSearchResult)
-                //    return Color.FromRgb(193, 82, 216);
+        //[Ignored]
+        //public Color Color
+        //{
+        //    get
+        //    {
+        //        //if (IsSearchResult)
+        //        //    return Color.FromRgb(193, 82, 216);
 
-                if (IsDone)
-                    return Color.FromRgb(44, 211, 84); // TODO
 
-                return Color.FromRgb(255, 31, 30);
-            }
-        }
+        //    }
+        //}
 
         // TODO: Reinstate ExternalYelpData
         //public YelpBusiness ExternalYelpData { get; set; }

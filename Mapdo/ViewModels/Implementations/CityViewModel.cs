@@ -57,7 +57,12 @@ namespace Mapdo.ViewModels
         private void OnItemDone(Object obj)
         {
             var item = obj as Place;
-            item.IsDone = !item.IsDone;
+
+            var realm = Realm.GetInstance();
+            realm.Write(() =>
+            {
+                item.IsDone = !item.IsDone;
+            });
         }
 
         private async void OnItemMore(Object obj)
@@ -73,8 +78,11 @@ namespace Mapdo.ViewModels
 
                 case "Delete Place":
                     {
-                        //City.Places.Remove(item);
-                        //RaiseChanged();
+                        var realm = Realm.GetInstance();
+                        realm.Write(() =>
+                        {
+                            realm.Remove(item);
+                        });
                         break;
                     }
 

@@ -13,6 +13,11 @@ namespace Mapdo.ViewModels
         public void SetState<T>(Action<T> action) where T : class, IViewModel
         {
             action(this as T);
+            RaiseStateChanged();
+        }
+
+        protected void RaiseStateChanged()
+        {
             StateChanged?.Invoke(this, EventArgs.Empty);
         }
     }

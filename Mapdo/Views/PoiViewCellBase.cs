@@ -50,7 +50,7 @@ namespace Mapdo
 				WidthRequest = 16,
 				HeightRequest = 16
 			};
-			circle.SetBinding(ShapeView.ColorProperty, new Binding("Color", BindingMode.OneWay));
+			circle.SetBinding(ShapeView.ColorProperty, new Binding("IsDone", BindingMode.OneWay, new PlaceDoneToColorConverter()));
 
 			//var circleContentView = new ContentView()
 			//{

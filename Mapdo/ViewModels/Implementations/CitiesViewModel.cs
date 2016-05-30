@@ -1,6 +1,6 @@
 ﻿using Acr.UserDialogs;
 using Mapdo.Models;
-using PropertyChanged;
+//using PropertyChanged;
 using Realms;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,6 @@ using Xamarin.Forms;
 
 namespace Mapdo.ViewModels
 {
-    [ImplementPropertyChanged]
     public class CitiesViewModel : ViewModelBase
     {
         // ===========================================================================

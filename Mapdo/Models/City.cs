@@ -1,5 +1,4 @@
-﻿using PropertyChanged;
-using Realms;
+﻿using Realms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Mapdo.Models
 {
-    [ImplementPropertyChanged]
     public class City : RealmObject
     {
         [ObjectId]

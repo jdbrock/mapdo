@@ -2,11 +2,11 @@ using System;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms;
 using Mapdo;
-using PropertyChanged;
+//using PropertyChanged;
 
 namespace Mapdo
 {
-    [ImplementPropertyChanged]
+    //[ImplementPropertyChanged]
 	public class ExtendedPin
 	{
         // ===========================================================================

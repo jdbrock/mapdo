@@ -1,6 +1,5 @@
 ﻿
 //using Acr.UserDialogs;
-using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +11,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Mapdo.Models;
 using Realms;
+using PropertyChanged;
 
 namespace Mapdo.ViewModels
 {
@@ -48,6 +48,18 @@ namespace Mapdo.ViewModels
 
             OnItemDoneCommand = new Command(OnItemDone);
             OnItemMoreCommand = new Command(OnItemMore);
+
+            //Realm.GetInstance().RealmChanged += (S, E) =>
+            //{
+            //    // Hack to fresh from Realm changes.
+            //    var pins = Pins;
+            //    Pins = null;
+            //    Pins = pins;
+
+            //    var city = City;
+            //    City = null;
+            //    City = city;
+            //};
         }
 
         // ===========================================================================

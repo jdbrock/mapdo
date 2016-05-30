@@ -36,6 +36,8 @@ namespace Mapdo.Views
 
             searchBar.SearchButtonPressed += OnSearchButtonPressed;
             searchBar.TextChanged += OnSearchTextChanged;
+
+            Realm.GetInstance().RealmChanged += (S, E) => poiListView.ItemsSource = ViewModel.City.Places;
         }
         // ===========================================================================
         // = Event Handling
@@ -153,7 +155,6 @@ namespace Mapdo.Views
                     //place.Parent    = ViewModel.City.Name;
 
                     ViewModel.City.Places.Add(place);
-                    ViewModel.City = ViewModel.City;
                 });
 
                 if (place == null)

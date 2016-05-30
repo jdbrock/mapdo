@@ -11,7 +11,6 @@ using YelpSharp;
 
 namespace Mapdo.Models
 {
-    [ImplementPropertyChanged]
     public class Place : RealmObject
     {
         [Indexed]

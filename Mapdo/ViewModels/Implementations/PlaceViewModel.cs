@@ -1,5 +1,4 @@
 ﻿using Mapdo.Models;
-using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +10,6 @@ using Xamarin.Forms;
 
 namespace Mapdo.ViewModels
 {
-    [ImplementPropertyChanged]
     public class PlaceViewModel : ViewModelBase
     {
         // ===========================================================================

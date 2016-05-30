@@ -9,7 +9,7 @@ using System.Reflection;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
-using PropertyChanged;
+//using PropertyChanged;
 using Mapdo.ViewModels;
 using Mapdo.Models;
 using Mapdo.Views;
@@ -18,7 +18,7 @@ using Mapdo.Bootstrap;
 
 namespace Mapdo
 {
-    [ImplementPropertyChanged]
+    //[ImplementPropertyChanged]
     public class App : Application
     {
         // ===========================================================================

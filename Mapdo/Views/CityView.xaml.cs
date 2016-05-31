@@ -60,6 +60,23 @@ namespace Mapdo.Views
             RefreshMapExtent();
         }
 
+        public override void OnViewModelReplaced(IViewModel oldViewModel, IViewModel newViewModel)
+        {
+            var oldCityViewModel = (CityViewModel)oldViewModel;
+            var newCityViewModel = (CityViewModel)newViewModel;
+
+            if (oldCityViewModel != null)
+                oldCityViewModel.Changed -= OnViewModelChanged;
+
+            if (newCityViewModel != null)
+                newCityViewModel.Changed += OnViewModelChanged;
+        }
+
+        private void OnViewModelChanged(object sender, EventArgs e)
+        {
+            RecreatePins();
+        }
+
         public override void OnViewModelRefreshed(object sender, EventArgs args)
         {
             Refresh();

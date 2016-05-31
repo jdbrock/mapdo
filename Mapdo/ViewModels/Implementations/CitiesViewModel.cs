@@ -1,5 +1,6 @@
 ﻿using Acr.UserDialogs;
 using Mapdo.Models;
+using PropertyChanged;
 //using PropertyChanged;
 using Realms;
 using System;
@@ -13,13 +14,14 @@ using Xamarin.Forms;
 
 namespace Mapdo.ViewModels
 {
+    [ImplementPropertyChanged]
     public class CitiesViewModel : ViewModelBase
     {
         // ===========================================================================
         // = Public Properties
         // ===========================================================================
         
-        public RealmResults<City> Cities { get; }
+        public RealmResults<City> Cities { get; private set; }
         public ICommand DeleteCity { get; }
 
         // ===========================================================================
@@ -31,13 +33,25 @@ namespace Mapdo.ViewModels
             var realm = Realm.GetInstance();
             Cities = realm.All<City>();
 
+            Cities.SubscribeForNotifications(OnCitiesChanged);
+
             DeleteCity = new Command(DoDeleteCity);
+        }
+
+        // ===========================================================================
+        // = Change Notification
+        // ===========================================================================
+        
+        private void OnCitiesChanged(RealmResults<City> sender, RealmResults<City>.ChangeSet changes, Exception error)
+        {
+            Cities = null;
+            Cities = Realm.GetInstance().All<City>();
         }
 
         // ===========================================================================
         // = Private Methods - Command Implementations
         // ===========================================================================
-        
+
         private async void DoDeleteCity(object obj)
         {
             if (obj == null)

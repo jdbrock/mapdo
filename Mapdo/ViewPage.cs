@@ -15,10 +15,10 @@ namespace Mapdo
         public T ViewModel
         {
             get { return _viewModel; }
-            set { var oldViewModel = _viewModel; _viewModel = value; BindingContext = _viewModel; OnViewModelChanged(oldViewModel, _viewModel); }
+            set { var oldViewModel = _viewModel; _viewModel = value; BindingContext = _viewModel; OnViewModelReplaced(oldViewModel, _viewModel); }
         }
 
-        public void OnViewModelChanged(IViewModel oldViewModel, IViewModel newViewModel)
+        public virtual void OnViewModelReplaced(IViewModel oldViewModel, IViewModel newViewModel)
         {
             if (oldViewModel != null)
                 oldViewModel.StateChanged -= OnViewModelRefreshed;

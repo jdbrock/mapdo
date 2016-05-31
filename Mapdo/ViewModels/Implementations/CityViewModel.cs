@@ -32,10 +32,10 @@ namespace Mapdo.ViewModels
         public ICommand OnItemDoneCommand { get; set; }
         public ICommand OnItemMoreCommand { get; set; }
 
-        //public event EventHandler Changed;
+        public event EventHandler Changed;
         //public event EventHandler<NavigationRequestedArgs> NavigationRequested;
 
-        public Views.CityView View { get; set; }
+        //public Views.CityView View { get; set; }
 
         // ===========================================================================
         // = Construction
@@ -75,12 +75,14 @@ namespace Mapdo.ViewModels
             {
                 item.IsDone = !item.IsDone;
             });
+
+            RaiseChanged();
         }
 
         private async void OnItemMore(Object obj)
         {
             var item = obj as Place;
-            var result = await View.DisplayActionSheet(item.Name, "Cancel", "Delete Place", "Show Info", "View in Yelp", "Book an Uber");
+            var result = await Acr.UserDialogs.UserDialogs.Instance.ActionSheetAsync(item.Name, "Cancel", "Delete Place", null, "Show Info", "View in Yelp", "Book an Uber");
             var encode = (Func<String, String>)WebUtility.UrlEncode;
 
             switch (result)
@@ -95,6 +97,8 @@ namespace Mapdo.ViewModels
                         {
                             realm.Remove(item);
                         });
+
+                        RaiseChanged();
                         break;
                     }
 
@@ -138,9 +142,9 @@ namespace Mapdo.ViewModels
         //        handler(this, new NavigationRequestedArgs(viewModel));
         //}
 
-        //private void RaiseChanged()
-        //{
-        //    Changed?.Invoke(this, EventArgs.Empty);
-        //}
+        private void RaiseChanged()
+        {
+            Changed?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace Mapdo
     public class Configuration
     {
         [DataMember] public YelpConfiguration Yelp { get; set; }
+        [DataMember] public string HockeyAppId { get; set; }
     }
 }

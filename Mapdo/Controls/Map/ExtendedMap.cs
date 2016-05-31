@@ -44,7 +44,7 @@ namespace Mapdo
         // = Bindable Properties
         // ===========================================================================
 
-        public static readonly BindableProperty SelectedPinProperty = BindableProperty.Create<ExtendedMap, ExtendedPin>(x => x.SelectedPin, null);
+        public static readonly BindableProperty SelectedPinProperty = BindableProperty.Create(nameof(SelectedPin), typeof(ExtendedPin), typeof(ExtendedMap));
         public ExtendedPin SelectedPin
         {
             get { return (ExtendedPin)base.GetValue(SelectedPinProperty); }

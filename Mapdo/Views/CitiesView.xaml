@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<v:CitiesViewBase xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Mapdo.ViewModels"
+             xmlns:v="clr-namespace:Mapdo.Views"
+             xmlns:this="clr-namespace:Mapdo"
+             x:Class="Mapdo.Views.CitiesView"
+             x:Name="CitiesView"
+             Title="Cities">
+
+  <v:CitiesViewBase.ToolbarItems>
+    <ToolbarItem Name="Add City" Order="Primary" Priority="0" Activated="OnAddCity" />
+  </v:CitiesViewBase.ToolbarItems>
+
+  <ListView x:Name="list" ItemsSource="{Binding Cities}" ItemTapped="OnCityTapped">
+    <ListView.ItemTemplate>
+      <DataTemplate>
+        <TextCell Text="{Binding Name}">
+          <TextCell.ContextActions>
+            <MenuItem Text="Delete" Command="{Binding Source={x:Reference CitiesView}, Path=ViewModel.DeleteCity}" IsDestructive="True" CommandParameter="{Binding}" />
+          </TextCell.ContextActions>
+        </TextCell>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+    
+</v:CitiesViewBase>

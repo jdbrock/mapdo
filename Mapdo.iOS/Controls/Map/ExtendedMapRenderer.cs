@@ -10,8 +10,8 @@ using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using UIKit;
 using System.Threading.Tasks;
-using Xamarin.Geolocation;
-using BigTed;
+//using Xamarin.Geolocation;
+//using BigTed;
 using System.Linq;
 using System;
 using Mapdo;
@@ -48,6 +48,9 @@ namespace Mapdo.iOS
 
 		private void MoveToRegion(MapSpan mapSpan)
 		{
+            if (Control == null)
+                return;
+
 			Xamarin.Forms.Maps.Position center = mapSpan.Center;
 			var region = new MKCoordinateRegion(new CLLocationCoordinate2D(center.Latitude, center.Longitude), new MKCoordinateSpan(mapSpan.LatitudeDegrees, mapSpan.LongitudeDegrees));
 			Control.SetRegion(region, true);
@@ -190,19 +193,21 @@ namespace Mapdo.iOS
 
 		private async Task SetMapCenterToUserLocation()
 		{
-			var geoLocator = new Geolocator();
-			try {
-				BTProgressHUD.Show(maskType: ProgressHUD.MaskType.Black); //shows the spinner
-				var position = await geoLocator.GetPositionAsync (10000);
-				BTProgressHUD.Dismiss(); //dismiss the spinner
+            //var geoLocator = new Geolocator();
+            //try {
+            //	//BTProgressHUD.Show(maskType: ProgressHUD.MaskType.Black); //shows the spinner
+            //	var position = await geoLocator.GetPositionAsync (10000);
+            //	//BTProgressHUD.Dismiss(); //dismiss the spinner
 
-				SetMapCenter (position.Latitude, position.Longitude, UserLocationZoom);
-			} 
-			catch (GeolocationException) 
-			{
-				// Do something useful here
-				SetMapCenter (0, 0, DefaultZoom);
-			}
+            //	SetMapCenter (position.Latitude, position.Longitude, UserLocationZoom);
+            //} 
+            //catch (GeolocationException) 
+            //{
+            //	// Do something useful here
+            //	SetMapCenter (0, 0, DefaultZoom);
+            //}
+
+            await new Task(() => { });
 		}
 			
 		private const int DefaultZoom = 5000;

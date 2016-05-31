@@ -1,21 +1,20 @@
-﻿using Akavache;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Reactive;
-using System.Reactive.Linq;
-
-using Xamarin.Forms;
-using PropertyChanged;
-using Xamarin.Forms.Maps;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.Reflection;
+using Xamarin.Forms;
+using Xamarin.Forms.Maps;
+using Mapdo.ViewModels;
+using Mapdo.Models;
+using Mapdo.Views;
+using Realms;
+using Mapdo.Bootstrap;
 
 namespace Mapdo
 {
-    [ImplementPropertyChanged]
     public class App : Application
     {
         // ===========================================================================
@@ -28,14 +27,7 @@ namespace Mapdo
         // = Public Properties
         // ===========================================================================
 
-        public static Data Data { get; set; }
         public static Configuration Config { get; set; }
-
-        // ===========================================================================
-        // = Private Fields
-        // ===========================================================================
-        
-        private static TripViewModel _mainViewModel;
 
         // ===========================================================================
         // = Construction
@@ -43,18 +35,11 @@ namespace Mapdo
         
         public App()
         {
-            BlobCache.ApplicationName = "Mapdo";
-            BlobCache.EnsureInitialized();
-
-            //ResetAllData();
-
-            Data = new Data();
+            var bootstrapper = new AppBootstrapper(this);
+            bootstrapper.Run();
 
             LoadConfiguration();
-            LoadData();
-
-            _mainViewModel = new TripViewModel();
-            MainPage = new NavigationPage(new TripView(_mainViewModel));
+            CreateInitialData();
         }
 
         private void LoadConfiguration()
@@ -66,65 +51,24 @@ namespace Mapdo
         }
 
         // ===========================================================================
-        // = Public Methods
-        // ===========================================================================
-
-        public static void Save()
-        {
-            BlobCache.UserAccount.InsertObject("Configuration", Data);
-        }
-
-        // ===========================================================================
-        // = Event Handling
-        // ===========================================================================
-
-        protected override void OnStart() { }
-        protected override void OnResume() { }
-        protected override void OnSleep()
-        {
-            BlobCache.UserAccount.Flush();
-        }
-
-        // ===========================================================================
         // = Private Methods
         // ===========================================================================
 
-        private static void ResetAllData()
+        private static void CreateInitialData()
         {
-            BlobCache.UserAccount.InvalidateAll();
-        }
+            var realm = Realm.GetInstance();
 
-        private static void LoadData()
-        {
-            BlobCache.UserAccount.GetObject<Data>("Configuration")
-                .Subscribe(
-                next =>
-                {
-                    Data = next;
-                    _mainViewModel.Trips = Data.Trips;
-                },
-                error =>
-                {
-                    CreateMockupData();
-                    _mainViewModel.Trips = Data.Trips;
-                });
-        }
+            if (realm.All<City>().Any())
+                return;
 
-        private static void CreateMockupData()
-        {
-            var trip = new Trip("Portland, OR");
-
-            var gc = new Geocoder();
-            var pos = gc.GetPositionsForAddressAsync(trip.Name).Result.FirstOrDefault();
-
-            if (pos != null)
+            realm.Write(() =>
             {
-                trip.Latitude = pos.Latitude;
-                trip.Longitude = pos.Longitude;
-            }
+                var city = realm.CreateObject<City>();
 
-            Data.Trips.Add(trip);
-            Save();
+                city.Name = "Portland, OR";
+                city.Latitude = 45.5231d;
+                city.Longitude = -122.6765d;
+            });
         }
     }
 }

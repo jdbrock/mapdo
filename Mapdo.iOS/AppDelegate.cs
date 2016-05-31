@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xamarin.Themes;
-using Xamarin.Themes.Core;
+//using Xamarin.Themes;
+//using Xamarin.Themes.Core;
 using Foundation;
 using UIKit;
-using Brock.Services;
 using System.Reflection;
-using Akavache;
+using HockeyApp;
 
 namespace Mapdo.iOS
 {
@@ -24,18 +23,46 @@ namespace Mapdo.iOS
         //
         // You have 17 seconds to return from this method, or iOS will terminate your application.
         //
-        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        public override bool FinishedLaunching(UIApplication uiApp, NSDictionary options)
         {
-            Services.GetBaseTypeFunc = T => T.BaseType;
-            Services.GetInterfacesFunc = T => T.FindInterfaces(new TypeFilter((X, O) => true), null);
-            Services.Register(new AssemblyService());
+            // Initialize Xamarin (needs to happen before App instantiation).
+            InitializeXamarin();
 
+            // Create app.
+            var app = new App();
+
+            // Further initialization.
+            InitializeHockeyApp();
+            //InitializeLegacyServices();
+
+            // Load app.
+            LoadApplication(app);
+
+            return base.FinishedLaunching(uiApp, options);
+        }
+
+        private void InitializeHockeyApp()
+        {
+            var hockeyManager = BITHockeyManager.SharedHockeyManager;
+
+            hockeyManager.Configure(App.Config.HockeyAppId);
+            hockeyManager.DebugLogEnabled = true;
+            hockeyManager.StartManager();
+        }
+
+        //private void InitializeLegacyServices()
+        //{
+        //    Services.Initialize(
+        //        T => T.BaseType,
+        //        T => T.FindInterfaces((X, Y) => true, null));
+
+        //    Services.Register(new AssemblyService());
+        //}
+
+        private void InitializeXamarin()
+        {
             global::Xamarin.Forms.Forms.Init();
             global::Xamarin.FormsMaps.Init();
-
-            LoadApplication(new App());
-
-            return base.FinishedLaunching(app, options);
         }
     }
 }

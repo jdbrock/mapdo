@@ -28,17 +28,12 @@ namespace Mapdo
     /// </summary>
     public class ShapeView : BoxView
     {
-        public static readonly BindableProperty ShapeTypeProperty = BindableProperty.Create<ShapeView, ShapeType>(s => s.ShapeType, ShapeType.Box);
-
-        public static readonly BindableProperty StrokeColorProperty = BindableProperty.Create<ShapeView, Color>(s => s.StrokeColor, Color.Default);
-
-        public static readonly BindableProperty StrokeWidthProperty = BindableProperty.Create<ShapeView, float>(s => s.StrokeWidth, 1f);
-
-        public static readonly BindableProperty IndicatorPercentageProperty = BindableProperty.Create<ShapeView, float>(s => s.IndicatorPercentage, 0f);
-
-        public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create<ShapeView, float>(s => s.CornerRadius, 0f);
-
-        public static readonly BindableProperty PaddingProperty = BindableProperty.Create<ShapeView, Thickness>(s => s.Padding, default(Thickness));
+        public static readonly BindableProperty ShapeTypeProperty = BindableProperty.Create(nameof(ShapeType), typeof(ShapeType), typeof(ShapeView), ShapeType.Box);
+        public static readonly BindableProperty StrokeColorProperty = BindableProperty.Create(nameof(StrokeColor), typeof(Color), typeof(ShapeView), Color.Default);
+        public static readonly BindableProperty StrokeWidthProperty = BindableProperty.Create(nameof(StrokeWidth), typeof(float), typeof(ShapeView), 1f);
+        public static readonly BindableProperty IndicatorPercentageProperty = BindableProperty.Create(nameof(IndicatorPercentage), typeof(float), typeof(ShapeView), 0f);
+        public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(nameof(CornerRadius), typeof(float), typeof(ShapeView), 0f);
+        public static readonly BindableProperty PaddingProperty = BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(ShapeView), default(Thickness));
 
         public ShapeType ShapeType
         {
@@ -64,7 +59,8 @@ namespace Mapdo
             set
             {
                 if (ShapeType != ShapeType.CircleIndicator)
-                    throw new ArgumentException("Can only specify this property with CircleIndicator");
+                    throw new ArgumentException("Can only specify this property with CircleIndicator.");
+
                 SetValue(IndicatorPercentageProperty, value);
             }
         }
@@ -75,7 +71,8 @@ namespace Mapdo
             set
             {
                 if (ShapeType != ShapeType.Box)
-                    throw new ArgumentException("Can only specify this property with Box");
+                    throw new ArgumentException("Can only specify this property with Box.");
+
                 SetValue(CornerRadiusProperty, value);
             }
         }
@@ -84,10 +81,6 @@ namespace Mapdo
         {
             get { return (Thickness)GetValue(PaddingProperty); }
             set { SetValue(PaddingProperty, value); }
-        }
-
-        public ShapeView()
-        {
         }
     }
 

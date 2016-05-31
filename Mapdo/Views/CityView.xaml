@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<v:CityViewBase xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:vm="clr-namespace:Mapdo.ViewModels"
+             xmlns:v="clr-namespace:Mapdo.Views"
+             xmlns:this="clr-namespace:Mapdo"
+             x:Class="Mapdo.Views.CityView"
+             Title="{Binding City.Name}">
+
+    <Grid RowSpacing="0" ColumnSpacing="0">
+      <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <this:ExtendedMap Grid.Column="0" WidthRequest="320" HeightRequest="200" x:Name="map" 
+                          IsShowingUser="True" MapType="Street" />
+      
+        <Grid x:Name="itemsGrid" Grid.Column="1" Grid.Row="0" RowSpacing="0" ColumnSpacing="0">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <SearchBar Grid.Row="0" Placeholder="Search" x:Name="searchBar">
+                
+            </SearchBar>
+
+            <ListView Grid.Row="1" x:Name="poiListView" ItemsSource="{Binding City.Places}" ItemTapped="OnSavedItemTapped" SeparatorColor="#ddd">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                      <this:PoiViewCellSavedItem />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <ListView Grid.Row="1" x:Name="searchListView" ItemsSource="{Binding SearchResults}" ItemTapped="OnSearchResultTapped" IsVisible="{Binding IsSearching}" SeparatorColor="#ddd">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                      <this:PoiViewCellSearchResult />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+        </Grid>
+    </Grid>
+    
+</v:CityViewBase>

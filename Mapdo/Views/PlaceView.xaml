@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<v:PlaceViewBase xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:this="clr-namespace:Mapdo"
+             xmlns:vm="clr-namespace:Mapdo.ViewModels"
+             xmlns:v="clr-namespace:Mapdo.Views"
+             x:Class="Mapdo.Views.PlaceView"
+             Title="{Binding Place.Name}">
+
+  <StackLayout Padding="20" Spacing="5">
+    <Label Text="{Binding Place.Name}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="24" />
+    <Label Text="{Binding Place.YelpDisplayAddress, StringFormat='Address: {0}'}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="14" />
+    <Label Text="{Binding Place.YelpDisplayPhone, StringFormat='Phone: {0}'}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="14" />
+    <Label Text="{Binding Place.YelpRating, StringFormat='Rating: {0}/5'}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="14" />
+
+    <!-- TODO: Reviews -->
+    <!--<ListView ItemsSource="{Binding Place.ExternalYelpData.reviews}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding excerpt}" />
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>-->
+  </StackLayout>
+  
+</v:PlaceViewBase>

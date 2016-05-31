@@ -184,12 +184,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Brock.Services\Brock.Services.csproj">
-      <Project>{5e254053-2af6-4701-8047-89752f5b46ca}</Project>
-      <Name>Brock.Services</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="config.secrets" />
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>

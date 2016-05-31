@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapdo", "Mapdo\Mapdo.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapdo.iOS", "Mapdo.iOS\Mapdo.iOS.csproj", "{E6B5EDB8-F27A-4C0C-8C14-CCAB4D46D7F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brock.Services", "Brock.Services\Brock.Services.csproj", "{5E254053-2AF6-4701-8047-89752F5B46CA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
@@ -101,46 +99,6 @@ Global
 		{E6B5EDB8-F27A-4C0C-8C14-CCAB4D46D7F8}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{E6B5EDB8-F27A-4C0C-8C14-CCAB4D46D7F8}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{E6B5EDB8-F27A-4C0C-8C14-CCAB4D46D7F8}.Release|x86.ActiveCfg = Release|iPhone
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|Any CPU.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|ARM.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|ARM.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|iPhoneSimulator.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|x86.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Ad-Hoc|x86.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|Any CPU.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|ARM.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|ARM.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|iPhone.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|iPhone.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|iPhoneSimulator.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|x86.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.AppStore|x86.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|ARM.Build.0 = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Debug|x86.Build.0 = Debug|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|ARM.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|ARM.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|iPhone.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|x86.ActiveCfg = Release|Any CPU
-		{5E254053-2AF6-4701-8047-89752F5B46CA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

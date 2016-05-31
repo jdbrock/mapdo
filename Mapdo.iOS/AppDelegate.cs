@@ -5,7 +5,6 @@ using System.Linq;
 //using Xamarin.Themes.Core;
 using Foundation;
 using UIKit;
-using Brock.Services;
 using System.Reflection;
 using HockeyApp;
 

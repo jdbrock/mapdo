@@ -93,7 +93,6 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Services\AssemblyService.cs" />
     <Compile Include="Controls\Shape\ShapeRenderer.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
@@ -117,10 +116,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Brock.Services\Brock.Services.csproj">
-      <Project>{5e254053-2af6-4701-8047-89752f5b46ca}</Project>
-      <Name>Brock.Services</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mapdo\Mapdo.csproj">
       <Name>Mapdo</Name>
     </ProjectReference>

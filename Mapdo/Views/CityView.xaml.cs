@@ -1,6 +1,4 @@
-﻿//using Acr.UserDialogs;
-using Acr.UserDialogs;
-using Brock.Services;
+﻿using Acr.UserDialogs;
 using Mapdo.Models;
 using Mapdo.ViewModels;
 using Realms;

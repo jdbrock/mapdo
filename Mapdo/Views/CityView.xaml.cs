@@ -161,9 +161,11 @@ namespace Mapdo.Views
                     place.Longitude = result.Longitude;
                     place.Name      = result.Name;
                     place.IsDone    = false;
-                    //place.Parent    = ViewModel.City.Name;
+                    place.SetYelpData(result.YelpData);
 
                     ViewModel.City.Places.Add(place);
+
+                    ViewModel.HACK_ResetCityToTriggerRefresh();
                 });
 
                 if (place == null)
@@ -211,7 +213,7 @@ namespace Mapdo.Views
                         Latitude = business.location.coordinate.Latitude,
                         Longitude = business.location.coordinate.Longitude,
                         Address = String.Join(", ", business.location.display_address),
-                        //ExternalYelpData = business
+                        YelpData = business
                     };
 
                     if (currentPois.Contains(result.Address))

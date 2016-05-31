@@ -44,7 +44,7 @@
     <Compile Include="Configuration\YelpConfiguration.cs" />
     <Compile Include="Controls\Map\StandardPinColor.cs" />
     <Compile Include="Controls\Shape\ShapeView.cs" />
-    <Compile Include="Converters\PlaceDoneToColorConverter.cs" />
+    <Compile Include="Converters\PlaceToColorConverter.cs" />
     <Compile Include="Models\City.cs" />
     <Compile Include="Extensions\ElementExtensions.cs" />
     <Compile Include="Extensions\MapExtensions.cs" />

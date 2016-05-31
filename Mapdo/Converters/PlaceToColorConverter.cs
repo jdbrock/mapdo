@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mapdo.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,7 +9,7 @@ using Xamarin.Forms;
 
 namespace Mapdo
 {
-    public class PlaceDoneToColorConverter : IValueConverter
+    public class PlaceToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

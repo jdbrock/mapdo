@@ -1,5 +1,4 @@
 ﻿
-//using Acr.UserDialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +11,8 @@ using Xamarin.Forms;
 using Mapdo.Models;
 using Realms;
 using PropertyChanged;
+using Mapdo.Services;
+using Acr.UserDialogs;
 
 namespace Mapdo.ViewModels
 {
@@ -34,11 +35,19 @@ namespace Mapdo.ViewModels
         public event EventHandler Changed;
 
         // ===========================================================================
+        // = Private Fields
+        // ===========================================================================
+
+        private INavigationService _navigationService;
+
+        // ===========================================================================
         // = Construction
         // ===========================================================================
 
-        public CityViewModel()
+        public CityViewModel(INavigationService navigationService)
         {
+            _navigationService = navigationService;
+
             SearchResults = new ObservableCollection<SearchResult>();
             Pins = new ObservableCollection<ExtendedPin>();
 
@@ -75,53 +84,62 @@ namespace Mapdo.ViewModels
                     break;
 
                 case "Delete Place":
+                {
+                    var realm = Realm.GetInstance();
+                    realm.Write(() =>
                     {
-                        var realm = Realm.GetInstance();
-                        realm.Write(() =>
-                        {
-                            realm.Remove(item);
-                        });
+                        realm.Remove(item);
+                    });
 
-                        RaiseChanged();
-                        break;
-                    }
+                    RaiseChanged();
+                    HACK_ResetCityToTriggerRefresh();
+                    break;
+                }
 
                 // TODO: Reinstate Show Info
-                //case "Show Info":
-                //    {
-                //        if (item.ExternalYelpData == null || String.IsNullOrWhiteSpace(item.ExternalYelpData.id))
-                //            UserDialogs.Instance.ShowError("Yelp data missing.");
-                //        else
-                //            Navigate(new PlaceInformationViewModel(item));
+                case "Show Info":
+                {
+                    if (!item.HasYelpData)
+                        UserDialogs.Instance.ShowError("Yelp data missing.");
+                    else
+                        await _navigationService.PushAsync<PlaceViewModel>(X => X.Place = item);
 
-                //        break;
-                //    }
+                    break;
+                }
 
                 case "Book an Uber":
-                    {
-                        var uri = new Uri($"uber://?action=setPickup&pickup=my_location&client_id=Mapdo"
-                            + $"&dropoff[latitude]={item.Latitude}&dropoff[longitude]={item.Longitude}"
-                            + $"&dropoff[nickname]={encode(item.Name)}&dropoff[formatted_address]={encode(item.Address)}");
-                        Device.OpenUri(uri);
-                        break;
-                    }
+                {
+                    var uri = new Uri($"uber://?action=setPickup&pickup=my_location&client_id=Mapdo"
+                        + $"&dropoff[latitude]={item.Latitude}&dropoff[longitude]={item.Longitude}"
+                        + $"&dropoff[nickname]={encode(item.Name)}&dropoff[formatted_address]={encode(item.Address)}");
+                    Device.OpenUri(uri);
+                    break;
+                }
 
-                // TODO: Reinstate View in Yelp
-                //case "View in Yelp":
-                //    if (item.ExternalYelpData == null || String.IsNullOrWhiteSpace(item.ExternalYelpData.id))
-                //        UserDialogs.Instance.ShowError("Yelp data missing.");
-                //    else
-                //    {
-                //        var uri = new Uri($"yelp:///biz/{item.ExternalYelpData.id}");
-                //        Device.OpenUri(uri);
-                //    }
-                //    break;
+                case "View in Yelp":
+                {
+                    if (!item.HasYelpData)
+                        UserDialogs.Instance.ShowError("Yelp data missing.");
+                    else
+                    {
+                        var uri = new Uri($"yelp:///biz/{item.YelpId}");
+                        Device.OpenUri(uri);
+                    }
+                    break;
+                }
             }
         }
 
         private void RaiseChanged()
         {
             Changed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void HACK_ResetCityToTriggerRefresh()
+        {
+            var x = City;
+            City = null;
+            City = x;
         }
     }
 }

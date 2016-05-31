@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace Mapdo
 {
-    public class PoiViewCellBase : ViewCell
+    public abstract class PoiViewCellBase : ViewCell
     {
         public PoiViewCellBase()
         {
@@ -44,19 +44,7 @@ namespace Mapdo
 				Children = { nameLabel, addressLabel }
 			};
 
-			var circle = new ShapeView()
-			{
-				ShapeType = ShapeType.Circle,
-				WidthRequest = 16,
-				HeightRequest = 16
-			};
-			circle.SetBinding(ShapeView.ColorProperty, new Binding("IsDone", BindingMode.OneWay, new PlaceDoneToColorConverter()));
-
-			//var circleContentView = new ContentView()
-			//{
-			//    Content = circle,
-			//    Padding = new Thickness(4)
-			//};
+            var circle = CreateCircle();
 
 			var cellLayout = new StackLayout
 			{
@@ -69,5 +57,7 @@ namespace Mapdo
 
 			return cellLayout;
 		}
+
+        protected abstract ShapeView CreateCircle();
     }
 }

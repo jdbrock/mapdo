@@ -39,6 +39,20 @@ namespace Mapdo
 
             viewModel.OnItemMoreCommand.Execute(place);
         }
+
+        protected override ShapeView CreateCircle()
+        {
+            var circle = new ShapeView()
+            {
+                ShapeType = ShapeType.Circle,
+                WidthRequest = 16,
+                HeightRequest = 16
+            };
+
+            circle.SetBinding(ShapeView.ColorProperty, new Binding("IsDone", BindingMode.OneWay, new PlaceToColorConverter()));
+
+            return circle;
+        }
     }
 }
 

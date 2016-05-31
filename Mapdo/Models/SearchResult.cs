@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using YelpSharp;
 
 namespace Mapdo.Models
 {
@@ -20,5 +21,7 @@ namespace Mapdo.Models
 
         [Ignored]
         public Color Color => Color.FromRgb(193, 82, 216);
+
+        public YelpBusiness YelpData { get; set; }
     }
 }

@@ -9,17 +9,18 @@
 
   <StackLayout Padding="20" Spacing="5">
     <Label Text="{Binding Place.Name}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="24" />
-    <Label Text="{Binding Place.ExternalYelpData.DisplayAddress, StringFormat='Address: {0}'}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="14" />
-    <Label Text="{Binding Place.ExternalYelpData.display_phone, StringFormat='Phone: {0}'}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="14" />
-    <Label Text="{Binding Place.ExternalYelpData.rating, StringFormat='Rating: {0}/5'}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="14" />
+    <Label Text="{Binding Place.YelpDisplayAddress, StringFormat='Address: {0}'}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="14" />
+    <Label Text="{Binding Place.YelpDisplayPhone, StringFormat='Phone: {0}'}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="14" />
+    <Label Text="{Binding Place.YelpRating, StringFormat='Rating: {0}/5'}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="14" />
 
-    <ListView ItemsSource="{Binding Place.ExternalYelpData.reviews}">
+    <!-- TODO: Reviews -->
+    <!--<ListView ItemsSource="{Binding Place.ExternalYelpData.reviews}">
       <ListView.ItemTemplate>
         <DataTemplate>
           <TextCell Text="{Binding excerpt}" />
         </DataTemplate>
       </ListView.ItemTemplate>
-    </ListView>
+    </ListView>-->
   </StackLayout>
   
 </v:PlaceViewBase>

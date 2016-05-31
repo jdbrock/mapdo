@@ -23,22 +23,6 @@ namespace Mapdo.Models
 
         public Boolean IsDone { get; set; }
 
-
-        //[Indexed]
-        //public String Parent { get; set; }
-
-        //[Ignored]
-        //public Color Color
-        //{
-        //    get
-        //    {
-        //        //if (IsSearchResult)
-        //        //    return Color.FromRgb(193, 82, 216);
-
-
-        //    }
-        //}
-
         // TODO: Reinstate ExternalYelpData
         //public YelpBusiness ExternalYelpData { get; set; }
     }

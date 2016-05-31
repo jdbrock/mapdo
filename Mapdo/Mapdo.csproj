@@ -36,8 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AppContainer.cs" />
-    <Compile Include="AppSetup.cs" />
     <Compile Include="Bootstrap\AutofacBootstrapper.cs" />
     <Compile Include="Bootstrap\AutofacModule.cs" />
     <Compile Include="Bootstrap\AppBootstrapper.cs" />

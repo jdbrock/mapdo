@@ -39,10 +39,6 @@ namespace Mapdo.Views
         // = Event Handling
         // ===========================================================================
 
-        //private void OnRealmChanged(object sender, EventArgs e)
-        //{
-        //}
-
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
@@ -186,22 +182,6 @@ namespace Mapdo.Views
 
                 RefreshMapRenderer();
             }
-
-            //var poi = (Place)args.Item;
-            //poi.IsSearchResult = false;
-
-            //ViewModel.City.Places.Add(poi);
-
-            //ViewModel.Pins.Add(CreateSavedPinFromPlace(poi));
-
-            //ViewModel.IsSearching = false;
-            //ClearSearchResults();
-            //searchBar.Text = "";
-
-            //UserDialogs.Instance.ShowSuccess("Saved to Map");
-
-            //RefreshMapRenderer();
-            //App.Save();
         }
 
         private async void OnSearchButtonPressed(object sender, EventArgs e)
@@ -231,7 +211,6 @@ namespace Mapdo.Views
                         Latitude = business.location.coordinate.Latitude,
                         Longitude = business.location.coordinate.Longitude,
                         Address = String.Join(", ", business.location.display_address),
-                        //IsSearchResult = true,
                         //ExternalYelpData = business
                     };
 

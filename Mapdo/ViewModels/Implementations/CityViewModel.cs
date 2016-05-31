@@ -24,7 +24,6 @@ namespace Mapdo.ViewModels
         
         public City City { get; set; }
 
-        //public IEnumerable<Place> Places { get; set; }
         public ObservableCollection<SearchResult> SearchResults { get; set; }
         public ObservableCollection<ExtendedPin> Pins { get; set; }
 
@@ -33,9 +32,6 @@ namespace Mapdo.ViewModels
         public ICommand OnItemMoreCommand { get; set; }
 
         public event EventHandler Changed;
-        //public event EventHandler<NavigationRequestedArgs> NavigationRequested;
-
-        //public Views.CityView View { get; set; }
 
         // ===========================================================================
         // = Construction
@@ -48,18 +44,6 @@ namespace Mapdo.ViewModels
 
             OnItemDoneCommand = new Command(OnItemDone);
             OnItemMoreCommand = new Command(OnItemMore);
-
-            //Realm.GetInstance().RealmChanged += (S, E) =>
-            //{
-            //    // Hack to fresh from Realm changes.
-            //    var pins = Pins;
-            //    Pins = null;
-            //    Pins = pins;
-
-            //    var city = City;
-            //    City = null;
-            //    City = city;
-            //};
         }
 
         // ===========================================================================
@@ -134,13 +118,6 @@ namespace Mapdo.ViewModels
                 //    break;
             }
         }
-
-        //private void Navigate(IViewModel viewModel)
-        //{
-        //    var handler = NavigationRequested;
-        //    if (handler != null)
-        //        handler(this, new NavigationRequestedArgs(viewModel));
-        //}
 
         private void RaiseChanged()
         {

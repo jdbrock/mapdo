@@ -5,11 +5,8 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.Reflection;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-
-//using PropertyChanged;
 using Mapdo.ViewModels;
 using Mapdo.Models;
 using Mapdo.Views;
@@ -18,7 +15,6 @@ using Mapdo.Bootstrap;
 
 namespace Mapdo
 {
-    //[ImplementPropertyChanged]
     public class App : Application
     {
         // ===========================================================================
@@ -31,14 +27,7 @@ namespace Mapdo
         // = Public Properties
         // ===========================================================================
 
-        //public static Data Data { get; set; }
         public static Configuration Config { get; set; }
-
-        // ===========================================================================
-        // = Private Fields
-        // ===========================================================================
-        
-        //private static CitiesViewModel _mainViewModel;
 
         // ===========================================================================
         // = Construction
@@ -51,7 +40,6 @@ namespace Mapdo
 
             LoadConfiguration();
             CreateInitialData();
-            LoadData();
         }
 
         private void LoadConfiguration()
@@ -63,49 +51,8 @@ namespace Mapdo
         }
 
         // ===========================================================================
-        // = Public Methods
-        // ===========================================================================
-
-        public static void Save()
-        {
-            //BlobCache.UserAccount.InsertObject("Configuration", Data);
-        }
-
-        // ===========================================================================
-        // = Event Handling
-        // ===========================================================================
-
-        protected override void OnStart() { }
-        protected override void OnResume() { }
-        protected override void OnSleep()
-        {
-            //BlobCache.UserAccount.Flush();
-        }
-
-        // ===========================================================================
         // = Private Methods
         // ===========================================================================
-
-        private static void ResetAllData()
-        {
-            //BlobCache.UserAccount.InvalidateAll();
-        }
-
-        private static void LoadData()
-        {
-            //BlobCache.UserAccount.GetObject<Data>("Configuration")
-            //    .Subscribe(
-            //    next =>
-            //    {
-            //        Data = next;
-            //        _mainViewModel.Cities = Data.Trips;
-            //    },
-            //    error =>
-            //    {
-            //        CreateMockupData();
-            //        _mainViewModel.Cities = Data.Trips;
-            //    });
-        }
 
         private static void CreateInitialData()
         {

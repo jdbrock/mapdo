@@ -1,6 +1,7 @@
 ﻿using Realms;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using YelpSharp;
 
 namespace Mapdo.Models
 {
-    public class SearchResult
+    public class SearchResult : INotifyPropertyChanged
     {
         [Indexed]
         public String Name { get; set; }
@@ -23,5 +24,7 @@ namespace Mapdo.Models
         public Color Color => Color.FromRgb(193, 82, 216);
 
         public YelpBusiness YelpData { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

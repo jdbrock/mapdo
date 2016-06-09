@@ -1,7 +1,6 @@
 ﻿using Acr.UserDialogs;
 using Mapdo.Models;
 using PropertyChanged;
-//using PropertyChanged;
 using Realms;
 using System;
 using System.Collections.Generic;
@@ -21,7 +20,7 @@ namespace Mapdo.ViewModels
         // = Public Properties
         // ===========================================================================
         
-        public RealmResults<City> Cities { get; private set; }
+        public IList<City> Cities { get; private set; }
         public ICommand DeleteCity { get; }
 
         // ===========================================================================
@@ -31,21 +30,9 @@ namespace Mapdo.ViewModels
         public CitiesViewModel()
         {
             var realm = Realm.GetInstance();
-            Cities = realm.All<City>();
-
-            Cities.SubscribeForNotifications(OnCitiesChanged);
+            Cities = (IList<City>)realm.All<City>().ToNotifyCollectionChanged(error => { });
 
             DeleteCity = new Command(DoDeleteCity);
-        }
-
-        // ===========================================================================
-        // = Change Notification
-        // ===========================================================================
-        
-        private void OnCitiesChanged(RealmResults<City> sender, RealmResults<City>.ChangeSet changes, Exception error)
-        {
-            Cities = null;
-            Cities = Realm.GetInstance().All<City>();
         }
 
         // ===========================================================================

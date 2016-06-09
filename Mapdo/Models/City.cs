@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Mapdo.Models
 {
-    public class City : RealmObject
+    public class City : RealmObject, INotifyPropertyChanged
     {
         [ObjectId]
         public String Name { get; set; }
@@ -17,5 +18,7 @@ namespace Mapdo.Models
         public Double Longitude { get; set; }
 
         public RealmList<Place> Places { get; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

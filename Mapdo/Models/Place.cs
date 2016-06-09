@@ -11,7 +11,7 @@ using YelpSharp;
 
 namespace Mapdo.Models
 {
-    public class Place : RealmObject
+    public class Place : RealmObject, INotifyPropertyChanged
     {
         // ===========================================================================
         // = Public Properties - Common
@@ -26,6 +26,8 @@ namespace Mapdo.Models
         public String Address { get; set; }
 
         public Boolean IsDone { get; set; }
+
+        public String CityName { get; set; }
 
         // ===========================================================================
         // = Public Properties - Yelp
@@ -69,6 +71,8 @@ namespace Mapdo.Models
         //public string[] YelpLocationNeighborhoods { get; set; } // NYI on Realm
         public string YelpLocationPostalCode { get; set; }
         public string YelpLocationStateCode { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         // TODO: Yelp deals/reviews.
         //public List<YelpDeal> deals { get; set; }

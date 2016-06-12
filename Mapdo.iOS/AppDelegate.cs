@@ -52,7 +52,10 @@ namespace Mapdo.iOS
             UINavigationBar.Appearance.TintColor = UIColor.White;
             UINavigationBar.Appearance.BarTintColor = Color.FromHex("8e44ad").ToUIColor();
             UIBarButtonItem.Appearance.SetTitleTextAttributes(new UITextAttributes { TextColor = UIColor.White }, UIControlState.Normal);
+
+            UIView.Appearance.TintColor = Color.FromHex("8e44ad").ToUIColor();
         }
+
 
         private void InitializeHockeyApp()
         {

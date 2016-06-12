@@ -8,20 +8,26 @@
              x:Name="CitiesView"
              Title="Cities">
 
-  <v:CitiesViewBase.ToolbarItems>
+  <!--<v:CitiesViewBase.ToolbarItems>
     <ToolbarItem Name="Add City" Order="Primary" Priority="0" Command="{Binding AddCityCommand}" />
-  </v:CitiesViewBase.ToolbarItems>
+  </v:CitiesViewBase.ToolbarItems>-->
 
-  <this:ListView x:Name="list" ItemsSource="{Binding Cities}" ItemTappedCommand="{Binding ShowCityCommand}">
-    <ListView.ItemTemplate>
-      <DataTemplate>
-        <TextCell Text="{Binding Name}">
-          <TextCell.ContextActions>
-            <MenuItem Text="Delete" Command="{Binding Source={x:Reference CitiesView}, Path=ViewModel.DeleteCityCommand}" IsDestructive="True" CommandParameter="{Binding}" />
-          </TextCell.ContextActions>
-        </TextCell>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-  </this:ListView>
+  <Grid>
+
+    <this:ListView x:Name="list" ItemsSource="{Binding Cities}" ItemTappedCommand="{Binding ShowCityCommand}" SeparatorColor="#dddddd">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding Name}">
+            <TextCell.ContextActions>
+              <MenuItem Text="Delete" Command="{Binding Source={x:Reference CitiesView}, Path=ViewModel.DeleteCityCommand}" IsDestructive="True" CommandParameter="{Binding}" />
+            </TextCell.ContextActions>
+          </TextCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </this:ListView>
+
+    <this:RoundedButton Text="+" BackgroundColor="#8e44ad" WidthRequest="48" HeightRequest="48" VerticalOptions="End" HorizontalOptions="End" Margin="20" Command="{Binding AddCityCommand}" TextColor="White" FontSize="24" />
+  
+  </Grid>
     
 </v:CitiesViewBase>

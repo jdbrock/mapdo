@@ -31,39 +31,36 @@ namespace Mapdo.Views
         public CityView()
         {
             InitializeComponent();
-
-            searchBar.SearchButtonPressed += OnSearchButtonPressed;
-            searchBar.TextChanged += OnSearchTextChanged;
         }
+
         // ===========================================================================
-        // = Event Handling
+        // = Change Notification
         // ===========================================================================
-
-        protected override void OnSizeAllocated(double width, double height)
-        {
-            base.OnSizeAllocated(width, height);
-
-            _lastHeightAllocated = height;
-            _lastWidthAllocated = width;
-
-            RefreshRotation();
-        }
-
-        protected override void OnAppearing()
-        {
-            RefreshMapExtent();
-        }
 
         public override void OnViewModelReplaced(IViewModel oldViewModel, IViewModel newViewModel)
         {
-            var oldCityViewModel = (CityViewModel)oldViewModel;
-            var newCityViewModel = (CityViewModel)newViewModel;
+            UnhookChangeEvents(oldViewModel as CityViewModel);
+            HookChangeEvents(newViewModel as CityViewModel);
+        }
 
-            if (oldCityViewModel != null)
-                oldCityViewModel.Changed -= OnViewModelChanged;
+        private void HookChangeEvents(CityViewModel viewModel)
+        {
+            if (viewModel == null)
+                return;
 
-            if (newCityViewModel != null)
-                newCityViewModel.Changed += OnViewModelChanged;
+            viewModel.Changed += OnViewModelChanged;
+            viewModel.RequestMapNavigation += OnMapNavigationRequested;
+            viewModel.RequestMapNavigationExtent += OnMapNavigationExtentRequested;
+        }
+
+        private void UnhookChangeEvents(CityViewModel viewModel)
+        {
+            if (viewModel == null)
+                return;
+
+            viewModel.Changed -= OnViewModelChanged;
+            viewModel.RequestMapNavigation -= OnMapNavigationRequested;
+            viewModel.RequestMapNavigationExtent -= OnMapNavigationExtentRequested;
         }
 
         private void OnViewModelChanged(object sender, EventArgs e)
@@ -82,13 +79,26 @@ namespace Mapdo.Views
             RefreshMapExtent();
         }
 
+        // ===========================================================================
+        // = Rotation
+        // ===========================================================================
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+
+            _lastHeightAllocated = height;
+            _lastWidthAllocated = width;
+
+            RefreshRotation();
+        }
+
         private void RefreshRotation()
         {
             if (!_lastHeightAllocated.HasValue || !_lastWidthAllocated.HasValue || ViewModel == null)
                 return;
 
-            var viewModel = ViewModel;
-            var width  = _lastWidthAllocated.Value;
+            var width = _lastWidthAllocated.Value;
             var height = _lastHeightAllocated.Value;
 
             if (height > width) // Portrait
@@ -109,6 +119,25 @@ namespace Mapdo.Views
             }
         }
 
+        // ===========================================================================
+        // = Map
+        // ===========================================================================
+        
+        protected override void OnAppearing()
+        {
+            RefreshMapExtent();
+        }
+
+        private void OnMapNavigationExtentRequested(object sender, Position[] e)
+        {
+            map.ZoomToExtent(e);
+        }
+
+        private void OnMapNavigationRequested(object sender, Place place)
+        {
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(place.Latitude, place.Longitude), Distance.FromMiles(0.1)));
+        }
+
         private void RefreshMapExtent()
         {
             if (ViewModel == null)
@@ -123,122 +152,6 @@ namespace Mapdo.Views
             RecreatePins();
         }
 
-        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(e.NewTextValue))
-            {
-                ViewModel.IsSearching = false;
-                ClearSearchResults();
-            }
-        }
-
-        public void OnSavedItemTapped(Object sender, ItemTappedEventArgs args)
-        {
-            // Deselect.
-            var list = (ListView)sender;
-            list.SelectedItem = null;
-
-            // Pan to place.
-            var place = (Place)args.Item;
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(place.Latitude, place.Longitude), Distance.FromMiles(0.1)));
-        }
-
-        public void OnSearchResultTapped(Object sender, ItemTappedEventArgs args)
-        {
-            try
-            {
-                var result = (SearchResult)args.Item;
-
-                Place place = null;
-
-                var realm = Realm.GetInstance();
-                realm.Write(() =>
-                {
-                    // TODO: AutoMapper.
-                    place = realm.CreateObject<Place>();
-                    place.Address   = result.Address;
-                    place.Latitude  = result.Latitude;
-                    place.Longitude = result.Longitude;
-                    place.Name      = result.Name;
-                    place.IsDone    = false;
-                    place.SetYelpData(result.YelpData);
-
-                    ViewModel.City.Places.Add(place);
-
-                    ViewModel.HACK_ResetCityToTriggerRefresh();
-                });
-
-                if (place == null)
-                    throw new Exception($"Failed to write '{typeof(Place).Name}' instance.");
-
-                ViewModel.Pins.Add(CreateSavedPinFromPlace(place));
-
-                UserDialogs.Instance.ShowSuccess("Saved to Map");
-            }
-            finally
-            {
-                ViewModel.IsSearching = false;
-
-                searchBar.Text = String.Empty;
-                ClearSearchResults();
-
-                RefreshMapRenderer();
-            }
-        }
-
-        private async void OnSearchButtonPressed(object sender, EventArgs e)
-        {
-            ViewModel.IsSearching = true;
-
-            using (var dialog = UserDialogs.Instance.Loading("Searching..."))
-            {
-                var yelpClient = new YelpClient(App.Config.Yelp.AccessToken, App.Config.Yelp.AccessTokenSecret, App.Config.Yelp.ConsumerKey, App.Config.Yelp.ConsumerSecret);
-                var yelpGeneralOptions = new YelpSearchOptionsGeneral(query: searchBar.Text, radiusFilter: 25000);
-                var yelpLocationOptions = new YelpSearchOptionsLocation(ViewModel.City.Name);
-                var yelpSearchOptions = new YelpSearchOptions(general: yelpGeneralOptions, location: yelpLocationOptions);
-
-                var yelpResults = await yelpClient.SearchWithOptions(yelpSearchOptions);
-
-                ClearSearchResults();
-
-                var currentPois = new HashSet<String>(ViewModel.City.Places
-                    .Select(X => X.Address)
-                    .Distinct());
-
-                foreach (var business in yelpResults.businesses)
-                {
-                    var result = new SearchResult
-                    {
-                        Name = business.name,
-                        Latitude = business.location.coordinate.Latitude,
-                        Longitude = business.location.coordinate.Longitude,
-                        Address = String.Join(", ", business.location.display_address),
-                        YelpData = business
-                    };
-
-                    if (currentPois.Contains(result.Address))
-                        continue;
-
-                    var pin = CreateSearchResultPinFromPlace(result);
-
-                    ViewModel.Pins.Add(pin);
-                    ViewModel.SearchResults.Add(result);
-                }
-
-                var positions = ViewModel.SearchResults
-                    .Select(X => new Position(X.Latitude, X.Longitude))
-                    .ToList();
-
-                map.ZoomToExtent(positions);
-
-                RefreshMapRenderer();
-            }
-        }
-
-        // ===========================================================================
-        // = Private Methods
-        // ===========================================================================
-
         private void RecreatePins()
         {
             ViewModel.Pins.Clear();
@@ -251,7 +164,7 @@ namespace Mapdo.Views
                 foreach (var result in ViewModel.SearchResults)
                     ViewModel.Pins.Add(CreateSearchResultPinFromPlace(result));
 
-            RefreshMapRenderer();
+            map.RefreshPins();
         }
 
         private ExtendedPin CreateSavedPinFromPlace(Place place)
@@ -273,30 +186,6 @@ namespace Mapdo.Views
                 PinColor = StandardPinColor.Purple,
                 IsSearchResult = true
             };
-        }
-
-        private void ClearSearchResults()
-        {
-            // Clear search results.
-            var pinsToRemove = ViewModel.Pins
-                .Select((X, I) => new { Index = I, Object = X })
-                .Where(X => X.Object.IsSearchResult)
-                .Select(X => X.Index)
-                .OrderByDescending(X => X)
-                .ToList();
-
-            foreach (var index in pinsToRemove)
-                ViewModel.Pins.RemoveAt(index);
-
-            ViewModel.SearchResults.Clear();
-
-            if (pinsToRemove.Count > 0)
-                RefreshMapRenderer();
-        }
-
-        private void RefreshMapRenderer()
-        {
-            map.RefreshPins();
         }
     }
 }

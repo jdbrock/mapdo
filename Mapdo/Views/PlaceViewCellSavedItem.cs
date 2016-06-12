@@ -28,7 +28,7 @@ namespace Mapdo
             var viewModel = (CityViewModel)page.BindingContext;
             var place = (Place)BindingContext;
 
-            viewModel.OnItemDoneCommand.Execute(place);
+            viewModel.SavedPlaceDoneCommand.Execute(place);
         }
 
         private void OnMenuItemMoreClicked(object sender, EventArgs e)
@@ -37,7 +37,7 @@ namespace Mapdo
             var viewModel = (CityViewModel)page.BindingContext;
             var place = (Place)BindingContext;
 
-            viewModel.OnItemMoreCommand.Execute(place);
+            viewModel.SavedPlaceMoreCommand.Execute(place);
         }
 
         protected override ShapeView CreateCircle()

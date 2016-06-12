@@ -9,19 +9,19 @@
              Title="Cities">
 
   <v:CitiesViewBase.ToolbarItems>
-    <ToolbarItem Name="Add City" Order="Primary" Priority="0" Activated="OnAddCity" />
+    <ToolbarItem Name="Add City" Order="Primary" Priority="0" Command="{Binding AddCityCommand}" />
   </v:CitiesViewBase.ToolbarItems>
 
-  <ListView x:Name="list" ItemsSource="{Binding Cities}" ItemTapped="OnCityTapped">
+  <this:ListView x:Name="list" ItemsSource="{Binding Cities}" ItemTappedCommand="{Binding ShowCityCommand}">
     <ListView.ItemTemplate>
       <DataTemplate>
         <TextCell Text="{Binding Name}">
           <TextCell.ContextActions>
-            <MenuItem Text="Delete" Command="{Binding Source={x:Reference CitiesView}, Path=ViewModel.DeleteCity}" IsDestructive="True" CommandParameter="{Binding}" />
+            <MenuItem Text="Delete" Command="{Binding Source={x:Reference CitiesView}, Path=ViewModel.DeleteCityCommand}" IsDestructive="True" CommandParameter="{Binding}" />
           </TextCell.ContextActions>
         </TextCell>
       </DataTemplate>
     </ListView.ItemTemplate>
-  </ListView>
+  </this:ListView>
     
 </v:CitiesViewBase>

@@ -42,6 +42,7 @@
     <Compile Include="Bootstrap\AppModule.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\YelpConfiguration.cs" />
+    <Compile Include="Controls\ListView.cs" />
     <Compile Include="Controls\Map\StandardPinColor.cs" />
     <Compile Include="Controls\Shape\ShapeView.cs" />
     <Compile Include="Converters\PlaceToColorConverter.cs" />

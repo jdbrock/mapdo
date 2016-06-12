@@ -33,57 +33,5 @@ namespace Mapdo.Views
 
             InitializeComponent();
         }
-
-        // ===========================================================================
-        // = Event Handling
-        // ===========================================================================
-        
-        public void OnCityTapped(Object sender, ItemTappedEventArgs args)
-        {
-            var city = (City)args.Item;
-
-            _navigation.PushAsync<CityViewModel>(vm =>
-            {
-                var realm = Realm.GetInstance();
-                var cityName = city.Name;
-
-                vm.City = city;
-            });
-        }
-
-        public async void OnAddCity(Object sender, EventArgs args)
-        {
-            var realm = Realm.GetInstance();
-            var prompt = await UserDialogs.Instance.PromptAsync("Where are you going?");
-
-            if (prompt.Ok)
-            {
-                var cityName = prompt.Text;
-
-                if (realm.All<City>().Any(X => X.Name == cityName))
-                    return;
-
-                using (var dialog = UserDialogs.Instance.Loading("Loading..."))
-                {
-                    if (String.IsNullOrWhiteSpace(cityName))
-                        return;
-
-                    var geocoder = new Geocoder();
-                    var position = (await geocoder.GetPositionsForAddressAsync(prompt.Text)).FirstOrDefault();
-
-                    if (position == null)
-                        return;
-
-                    realm.Write(() =>
-                    {
-                        var city = realm.CreateObject<City>();
-
-                        city.Name = cityName;
-                        city.Latitude = position.Latitude;
-                        city.Longitude = position.Longitude;
-                    });
-                }
-            }
-        }
     }
 }

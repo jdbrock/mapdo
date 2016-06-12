@@ -1,5 +1,6 @@
 ﻿using Acr.UserDialogs;
 using Mapdo.Models;
+using Mapdo.Services;
 using PropertyChanged;
 using Realms;
 using System;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace Mapdo.ViewModels
 {
@@ -19,27 +21,75 @@ namespace Mapdo.ViewModels
         // ===========================================================================
         // = Public Properties
         // ===========================================================================
-        
+
         public IList<City> Cities { get; private set; }
-        public ICommand DeleteCity { get; }
+
+        public ICommand AddCityCommand { get; }
+        public ICommand DeleteCityCommand { get; }
+        public ICommand ShowCityCommand { get; }
+
+        // ===========================================================================
+        // = Private Fields
+        // ===========================================================================
+
+        private INavigationService _navigationService;
 
         // ===========================================================================
         // = Construction
         // ===========================================================================
-        
-        public CitiesViewModel()
+
+        public CitiesViewModel(INavigationService navigationService)
         {
+            _navigationService = navigationService;
+
+            AddCityCommand = new Command(AddCity);
+            DeleteCityCommand = new Command(DeleteCity);
+            ShowCityCommand = new Command(ShowCity);
+
             var realm = Realm.GetInstance();
             Cities = (IList<City>)realm.All<City>().ToNotifyCollectionChanged(error => { });
-
-            DeleteCity = new Command(DoDeleteCity);
         }
 
         // ===========================================================================
         // = Private Methods - Command Implementations
         // ===========================================================================
 
-        private async void DoDeleteCity(object obj)
+        private async void AddCity(object obj)
+        {
+            var realm = Realm.GetInstance();
+            var prompt = await UserDialogs.Instance.PromptAsync("Where are you going?");
+
+            if (prompt.Ok)
+            {
+                var cityName = prompt.Text;
+
+                if (realm.All<City>().Any(X => X.Name == cityName))
+                    return;
+
+                using (var dialog = UserDialogs.Instance.Loading("Loading..."))
+                {
+                    if (String.IsNullOrWhiteSpace(cityName))
+                        return;
+
+                    var geocoder = new Geocoder();
+                    var position = (await geocoder.GetPositionsForAddressAsync(prompt.Text)).FirstOrDefault();
+
+                    if (position == null)
+                        return;
+
+                    realm.Write(() =>
+                    {
+                        var city = realm.CreateObject<City>();
+
+                        city.Name = cityName;
+                        city.Latitude = position.Latitude;
+                        city.Longitude = position.Longitude;
+                    });
+                }
+            }
+        }
+
+        private async void DeleteCity(object obj)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
@@ -59,6 +109,19 @@ namespace Mapdo.ViewModels
             realm.Write(() =>
             {
                 realm.Remove(city);
+            });
+        }
+
+        private async void ShowCity(object o)
+        {
+            var city = (City)o;
+
+            await _navigationService.PushAsync<CityViewModel>(vm =>
+            {
+                var realm = Realm.GetInstance();
+                var cityName = city.Name;
+
+                vm.City = city;
             });
         }
     }

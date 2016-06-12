@@ -32,18 +32,18 @@
                 
             </SearchBar>
 
-            <ListView Grid.Row="1" x:Name="poiListView" ItemsSource="{Binding City.Places}" ItemTapped="OnSavedItemTapped" SeparatorColor="#ddd">
+            <ListView Grid.Row="1" ItemsSource="{Binding City.Places}" ItemTapped="OnSavedItemTapped" SeparatorColor="#ddd">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                      <this:PoiViewCellSavedItem />
+                      <this:PlaceViewCellSavedItem />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
-            <ListView Grid.Row="1" x:Name="searchListView" ItemsSource="{Binding SearchResults}" ItemTapped="OnSearchResultTapped" IsVisible="{Binding IsSearching}" SeparatorColor="#ddd">
+            <ListView Grid.Row="1" ItemsSource="{Binding SearchResults}" ItemTapped="OnSearchResultTapped" IsVisible="{Binding IsSearching}" SeparatorColor="#ddd">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                      <this:PoiViewCellSearchResult />
+                      <this:PlaceViewCellSearchResult />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

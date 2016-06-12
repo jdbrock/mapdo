@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace Mapdo
 {
-    public class PoiViewCellSearchResult : PoiViewCellBase
+    public class PlaceViewCellSearchResult : PlaceViewCellBase
     {
         protected override ShapeView CreateCircle()
         {

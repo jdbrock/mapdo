@@ -7,9 +7,9 @@ using Xamarin.Forms;
 
 namespace Mapdo
 {
-    public abstract class PoiViewCellBase : ViewCell
+    public abstract class PlaceViewCellBase : ViewCell
     {
-        public PoiViewCellBase()
+        public PlaceViewCellBase()
         {
 			View = CreateCell();
         }

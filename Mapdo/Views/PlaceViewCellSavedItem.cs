@@ -5,9 +5,9 @@ using Xamarin.Forms;
 
 namespace Mapdo
 {
-	public class PoiViewCellSavedItem : PoiViewCellBase
+	public class PlaceViewCellSavedItem : PlaceViewCellBase
 	{
-		public PoiViewCellSavedItem()
+		public PlaceViewCellSavedItem()
 		{
             var menuItemMore = new MenuItem();
             menuItemMore.Text = "Options";

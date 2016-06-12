@@ -73,9 +73,9 @@
     <Compile Include="Views\PlaceView.xaml.cs">
       <DependentUpon>PlaceView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PoiViewCellBase.cs" />
-    <Compile Include="Views\PoiViewCellSavedItem.cs" />
-    <Compile Include="Views\PoiViewCellSearchResult.cs" />
+    <Compile Include="Views\PlaceViewCellBase.cs" />
+    <Compile Include="Views\PlaceViewCellSavedItem.cs" />
+    <Compile Include="Views\PlaceViewCellSearchResult.cs" />
     <Compile Include="Views\CitiesView.xaml.cs">
       <DependentUpon>CitiesView.xaml</DependentUpon>
     </Compile>

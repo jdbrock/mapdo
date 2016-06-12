@@ -7,6 +7,8 @@ using Foundation;
 using UIKit;
 using System.Reflection;
 using HockeyApp;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
 namespace Mapdo.iOS
 {
@@ -38,7 +40,18 @@ namespace Mapdo.iOS
             // Load app.
             LoadApplication(app);
 
+            ConfigureTheming();
+
             return base.FinishedLaunching(uiApp, options);
+        }
+
+        private void ConfigureTheming()
+        {
+            UIApplication.SharedApplication.SetStatusBarStyle(UIStatusBarStyle.LightContent, false);
+
+            UINavigationBar.Appearance.TintColor = UIColor.White;
+            UINavigationBar.Appearance.BarTintColor = Color.FromHex("8e44ad").ToUIColor();
+            UIBarButtonItem.Appearance.SetTitleTextAttributes(new UITextAttributes { TextColor = UIColor.White }, UIControlState.Normal);
         }
 
         private void InitializeHockeyApp()

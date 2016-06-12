@@ -52,6 +52,10 @@
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+  <key>UIStatusBarStyle</key>
+  <string>UIStatusBarStyleLightContent</string>
+  <key>UIViewControllerBasedStatusBarAppearance</key>
+  <false />
 	<key>CFBundleShortVersionString</key>
 	<string></string>
 	<key>NSLocationAlwaysUsageDescription</key>

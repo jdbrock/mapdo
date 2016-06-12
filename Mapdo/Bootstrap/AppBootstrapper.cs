@@ -38,7 +38,10 @@ namespace Mapdo.Bootstrap
             // Set main page.
             var viewService    = container.Resolve<IViewService>();
             var mainPage       = viewService.Resolve<CitiesViewModel>();
-            var navigationPage = new NavigationPage(mainPage);
+            var navigationPage = new NavigationPage(mainPage)
+            {
+                BarTextColor = Color.White
+            };
 
             _application.MainPage = navigationPage;
         }

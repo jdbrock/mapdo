@@ -31,6 +31,7 @@ namespace Mapdo.Bootstrap
             viewService.Register<CitiesViewModel, CitiesView>();
             viewService.Register<CityViewModel, CityView>();
             viewService.Register<PlaceViewModel, PlaceView>();
+            viewService.Register<AddCityViewModel, AddCityView>();
         }
 
         protected override void ConfigureApplication(IContainer container)

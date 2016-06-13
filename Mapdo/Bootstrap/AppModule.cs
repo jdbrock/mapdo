@@ -16,10 +16,12 @@ namespace Mapdo.Bootstrap
             builder.RegisterType<CitiesViewModel>().SingleInstance();
             builder.RegisterType<CityViewModel>().SingleInstance();
             builder.RegisterType<PlaceViewModel>().SingleInstance();
+            builder.RegisterType<AddCityViewModel>().SingleInstance();
 
             builder.RegisterType<CitiesView>().SingleInstance();
             builder.RegisterType<CityView>().SingleInstance();
             builder.RegisterType<PlaceView>().SingleInstance();
+            builder.RegisterType<AddCityView>().SingleInstance();
         }
     }
 }

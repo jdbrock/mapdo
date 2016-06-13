@@ -39,7 +39,7 @@ namespace Mapdo
             bootstrapper.Run();
 
             LoadConfiguration();
-            CreateInitialData();
+            //CreateInitialData();
         }
 
         private void LoadConfiguration()

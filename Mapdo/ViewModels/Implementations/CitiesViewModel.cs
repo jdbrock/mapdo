@@ -56,37 +56,7 @@ namespace Mapdo.ViewModels
 
         private async void AddCity(object obj)
         {
-            var realm = Realm.GetInstance();
-            var prompt = await UserDialogs.Instance.PromptAsync("Where are you going?");
-
-            if (prompt.Ok)
-            {
-                var cityName = prompt.Text;
-
-                if (realm.All<City>().Any(X => X.Name == cityName))
-                    return;
-
-                using (var dialog = UserDialogs.Instance.Loading("Loading..."))
-                {
-                    if (String.IsNullOrWhiteSpace(cityName))
-                        return;
-
-                    var geocoder = new Geocoder();
-                    var position = (await geocoder.GetPositionsForAddressAsync(prompt.Text)).FirstOrDefault();
-
-                    if (position == null)
-                        return;
-
-                    realm.Write(() =>
-                    {
-                        var city = realm.CreateObject<City>();
-
-                        city.Name = cityName;
-                        city.Latitude = position.Latitude;
-                        city.Longitude = position.Longitude;
-                    });
-                }
-            }
+            await _navigationService.PushAsync<AddCityViewModel>();
         }
 
         private async void DeleteCity(object obj)

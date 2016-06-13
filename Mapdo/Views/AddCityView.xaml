@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<v:AddCityViewBase xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Mapdo.ViewModels"
+             xmlns:v="clr-namespace:Mapdo.Views"
+             xmlns:this="clr-namespace:Mapdo"
+             x:Class="Mapdo.Views.AddCityView"
+             x:Name="AddCityView"
+             Title="Add City">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <SearchBar Grid.Row="0" Text="{Binding SearchText, Mode=TwoWay}" />
+
+    <this:ListView Grid.Row="1" x:Name="list" ItemsSource="{Binding Suggestions}" SeparatorColor="#dddddd" ItemTappedCommand="{Binding AddCityCommand}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding Name}" />
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </this:ListView>
+  </Grid>
+    
+</v:AddCityViewBase>

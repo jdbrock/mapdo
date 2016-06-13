@@ -47,6 +47,9 @@
     <Compile Include="Controls\RoundedButton.cs" />
     <Compile Include="Controls\Shape\ShapeView.cs" />
     <Compile Include="Converters\PlaceToColorConverter.cs" />
+    <Compile Include="Integrations\Teleport\TeleportCity.cs" />
+    <Compile Include="Integrations\Teleport\TeleportJsonClasses.cs" />
+    <Compile Include="Integrations\Teleport\TeleportClient.cs" />
     <Compile Include="Models\City.cs" />
     <Compile Include="Extensions\ElementExtensions.cs" />
     <Compile Include="Extensions\MapExtensions.cs" />
@@ -56,7 +59,9 @@
     <Compile Include="Controls\Map\MapExtensions.cs" />
     <Compile Include="Controls\Map\NotifyCollectionChangedEventSubscription.cs" />
     <Compile Include="Controls\Map\WeakEventSubscription.cs" />
+    <Compile Include="Integrations\Teleport\TeleportCitySuggestion.cs" />
     <Compile Include="Models\SearchResult.cs" />
+    <Compile Include="ViewModels\Implementations\AddCityViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="Services\Implementations\StandardNavigationService.cs" />
     <Compile Include="Services\Implementations\StandardViewService.cs" />
@@ -67,6 +72,9 @@
     <Compile Include="ViewModels\Implementations\CityViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewPage.cs" />
+    <Compile Include="Views\AddCityView.xaml.cs">
+      <DependentUpon>AddCityView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CityView.xaml.cs">
       <DependentUpon>CityView.xaml</DependentUpon>
     </Compile>
@@ -197,6 +205,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\PlaceView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\AddCityView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

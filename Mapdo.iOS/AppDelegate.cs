@@ -47,15 +47,19 @@ namespace Mapdo.iOS
 
         private void ConfigureTheming()
         {
+            var tint = Color.FromHex("8e44ad").ToUIColor();
+
             UIApplication.SharedApplication.SetStatusBarStyle(UIStatusBarStyle.LightContent, false);
 
             UINavigationBar.Appearance.TintColor = UIColor.White;
-            UINavigationBar.Appearance.BarTintColor = Color.FromHex("8e44ad").ToUIColor();
+            UINavigationBar.Appearance.BarTintColor = tint;
             UIBarButtonItem.Appearance.SetTitleTextAttributes(new UITextAttributes { TextColor = UIColor.White }, UIControlState.Normal);
 
-            UIView.Appearance.TintColor = Color.FromHex("8e44ad").ToUIColor();
-        }
+            UISearchBar.Appearance.TintColor = tint;
+            UIBarButtonItem.Appearance.TintColor = tint;
 
+            UIView.Appearance.TintColor = tint;
+        }
 
         private void InitializeHockeyApp()
         {
